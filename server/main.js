@@ -10,19 +10,21 @@ const cors = require('cors');
 app.use(express.static('public'));
 app.use(express.json());
 
-const corsOptions = {
-    origin: 'http://localhost:3000',
-    methods: 'GET, PUT, POST, DELETE',
-};
+// const corsOptions = {
+//     origin: 'http://localhost:8000',
+//     methods: 'GET, PUT, POST, DELETE',
+// };
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 
-const io = new Server(httpServer, {
-    cors: {
-        origin: 'http://localhost:3000',
-        methods: ['GET', 'POST'],
-    }
-});
+// const io = new Server(httpServer, {
+//     cors: {
+//         origin: 'http://localhost:8000',
+//         methods: ['GET', 'POST'],
+//     }
+// });
+
+const io = new Server(httpServer);
 
 // Http server connection
 httpServer.listen(8000, () => {
@@ -30,5 +32,7 @@ httpServer.listen(8000, () => {
 })
 
 io.on('connection', (socket) => {
-    console.log('Socket ID: ', socket.id);
+    socket.on('msg', msg => {
+        console.log(msg)
+    });
 });
