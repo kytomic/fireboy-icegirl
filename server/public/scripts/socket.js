@@ -1,6 +1,7 @@
 const Socket = (function() {
     // This stores the current Socket.IO socket
     let socket = null;
+    let playerNum = null;
 
     // This function gets the socket from the module
     const getSocket = function() {
@@ -11,11 +12,14 @@ const Socket = (function() {
     const connect = function() {
         socket = io();
 
-        console.log('connecting');
-
         // Wait for the socket to connect successfully
         socket.on("connect", () => {
-            socket.emit("msg", "hi");
+            console.log('Websocket is connecting...');
+        });
+        
+        // Wait for player num
+        socket.on("receive player", num => {
+            playerNum = num;
         });
     };
 
@@ -25,12 +29,10 @@ const Socket = (function() {
         socket = null;
     };
 
-    // This function sends a post message event to the server
-    const postMessage = function(content) {
-        if (socket && socket.connected) {
-            socket.emit("post message", content);
-        }
-    };
+    const assignPlayer = function() {
+        if (socket && socket.connected)
+            socket.emit("assign player");
+    }
 
-    return { getSocket, connect, disconnect, postMessage };
+    return { getSocket, connect, disconnect, postMessage, assignPlayer};
 })();
