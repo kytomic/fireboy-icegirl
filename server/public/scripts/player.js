@@ -80,6 +80,42 @@ const Player = function(ctx, x, y, gameArea) {
         speed = 50;
     };
 
+    // Jumping logic
+    let is_jumping = false;
+    let jumping_speed = 250;
+    let ground_level = -1;
+
+    const setGroundLevel = function(value) {
+        let { x, y } = sprite.getXY();
+        ground_level = y;
+    }
+
+    const getGroundLevel = function() {
+        return ground_level;
+    }
+
+    const setJumping = function(value) {
+        is_jumping = value;
+    }
+
+    const getJumping = function() {
+        return is_jumping;
+    }
+
+    const jump = function () {
+        let { x, y } = sprite.getXY();
+        if (((y - jumping_speed / 60)) < ground_level) {
+            y -= jumping_speed / 60;
+            jumping_speed -= 10;
+        }else{
+            y = ground_level;
+            is_jumping = false;
+            jumping_speed = 250;
+        }
+        if (gameArea.isPointInBox(x, y)) 
+            sprite.setXY(x, y);
+    };
+
     // This function updates the player depending on his movement.
     // - `time` - The timestamp when this function is called
     const update = function(time) {
@@ -90,7 +126,7 @@ const Player = function(ctx, x, y, gameArea) {
             /* Move the player */
             switch (direction) {
                 case 1: x -= speed / 60; break;
-                case 2: y -= speed / 60; break;
+                case 2: /*y -= speed / 60;*/ break;
                 case 3: x += speed / 60; break;
                 case 4: y += speed / 60; break;
             }
@@ -112,6 +148,13 @@ const Player = function(ctx, x, y, gameArea) {
         slowDown: slowDown,
         getBoundingBox: sprite.getBoundingBox,
         draw: sprite.draw,
-        update: update
+        update: update,
+        jump: jump,
+        setJumpingSpeed: setJumpingSpeed,
+        getJumpingSpeed: getJumpingSpeed,
+        setGroundLevel: setGroundLevel,
+        getGroundLevel: getGroundLevel,
+        getJumping: getJumping,
+        setJumping: setJumping
     };
 };
