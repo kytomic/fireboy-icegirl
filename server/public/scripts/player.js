@@ -153,6 +153,6 @@ const Player = function(ctx, x, y, gameArea) {
         setGroundLevel: setGroundLevel,
         getGroundLevel: getGroundLevel,
         getJumping: getJumping,
-        setJumping: setJumping
+        setJumping: setJumping,
     };
 };

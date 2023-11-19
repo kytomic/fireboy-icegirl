@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Collect the Gems!</title>
+    <title>FireBoy and IceGirl Remastered</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="./style/style.css">
 </head>
@@ -27,7 +27,7 @@
     <script src="scripts/bounding_box.js"></script>
     <script src="scripts/sprite.js"></script>
     <script src="scripts/player.js"></script>
-    <script src="scripts/gem.js"></script>
+    <script src="scripts/coin.js"></script>
     <script src="scripts/socket.js"></script>
 
     <script>    
@@ -44,9 +44,8 @@
         };
 
         const totalGameTime = 20;   // Total game time in seconds
-        const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
         let gameStartTime = 0;      // The timestamp when the game starts
-        let collectedGems = 0;      // The number of gems collected in the game
+        let collectedCoins = 0;      // The number of coins collected in the game
         let playerNum = null;
         let player = null;
         Socket.connect();
@@ -57,9 +56,11 @@
         const gameArea = BoundingBox(context, 165, 60, 420, 800);
         
         /* Create the sprites in the game */
-        const player1 = Player(context, 427, 240, gameArea); // The player
-        const player2 = Player(context, 427, 360, gameArea); // The player
-        const gem = Gem(context, 427, 350, "yellow");        // The gem
+        const player1 = Player(context, 427, 240, gameArea); // The player 1
+        const player2 = Player(context, 427, 360, gameArea); // The player 2
+        const coins = [Coin(context, 427, 350), 
+                       Coin(context, 327, 250),
+                       Coin(context, 400, 300)];        // The coins
         
         gameAreaPoints = gameArea.getPoints();
         
@@ -73,12 +74,8 @@
             $("#time-remaining").text(timeRemaining);
             
             /* Handle the game over situation here */
-            if (timeRemaining == 0) {
-                $('#final-gems').text(collectedGems);
-                // $('#game-over').show();
-                // return;
-            }
-
+            // $('#game-over').show();
+            
             // Jumping logic
             if (player1.getJumping() == true) {
                 player1.jump();
@@ -87,11 +84,22 @@
             if (player2.getJumping() == true) {
                 player2.jump();
             };
+
+            // Handling coin collection
+            coins.forEach(coin => {
+                if (coin.getBoundingBox().intersect(player1.getBoundingBox())) {
+                    player1.coinIncrement();
+                    coin.hide();
+                }else if (coin.getBoundingBox().intersect(player2.getBoundingBox())) {
+                    player2.coinIncrement();
+                    coin.hide();
+                }
+            })
             
             /* Update the sprites */
             player1.update(now);
             player2.update(now);
-            gem.update(now);
+            coins.forEach(coin => coin.update(now));
             
             // /* Clear the screen */
             context.clearRect(0, 0, cv.width, cv.height);
@@ -99,7 +107,7 @@
             // /* Draw the sprites */
             player1.draw();
             player2.draw();
-            gem.draw();
+            coins.forEach(coin => coin.draw())
             
             // /* Process the next frame */
             requestAnimationFrame(doFrame);
