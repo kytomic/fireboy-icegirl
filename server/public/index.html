@@ -79,9 +79,11 @@
                 // return;
             }
 
+            // Jumping logic
             if (player1.getJumping() == true) {
                 player1.jump();
             };
+
             if (player2.getJumping() == true) {
                 player2.jump();
             };
@@ -139,6 +141,7 @@
                         moveNum = 4
                     }
 
+                    // Send character movement to server for synchronised animation
                     if (playerNum == 1) {
                         socket.emit('player1 move', moveNum.toString());
                     }else{
@@ -164,6 +167,7 @@
                         stopNum = 4;
                     }
 
+                    // Send character movement to server for synchronised animation
                     if (playerNum == 1) {
                         socket.emit('player1 stop', stopNum.toString());
                     }else{
@@ -172,7 +176,7 @@
                 });
 
 
-                // Handle synchronized animation
+                // Receive other player's animation
                 if (player == player1) {
                     socket.on('move player2', (num) => {
                         num = Number(num);

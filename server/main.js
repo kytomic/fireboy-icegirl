@@ -22,8 +22,9 @@ io.on('connection', (socket) => {
     socket.on('assign player', () => {
         playerCount++;
         if (playerCount <= 2) {
-            socket.emit('receive player', playerCount.toString());
+            playerCount = 1;
         }
+        socket.emit('receive player', playerCount.toString());
     });
 
     socket.on('player1 move', (num) => {io.emit('move player1', num)})

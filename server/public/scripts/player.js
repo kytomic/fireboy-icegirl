@@ -150,8 +150,6 @@ const Player = function(ctx, x, y, gameArea) {
         draw: sprite.draw,
         update: update,
         jump: jump,
-        setJumpingSpeed: setJumpingSpeed,
-        getJumpingSpeed: getJumpingSpeed,
         setGroundLevel: setGroundLevel,
         getGroundLevel: getGroundLevel,
         getJumping: getJumping,
