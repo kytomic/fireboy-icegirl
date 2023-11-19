@@ -21,7 +21,7 @@ httpServer.listen(8000, () => {
 io.on('connection', (socket) => {
     socket.on('assign player', () => {
         playerCount++;
-        if (playerCount <= 2) {
+        if (playerCount > 2) {
             playerCount = 1;
         }
         socket.emit('receive player', playerCount.toString());

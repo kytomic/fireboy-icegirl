@@ -59,7 +59,7 @@
         /* Create the sprites in the game */
         const player1 = Player(context, 427, 240, gameArea); // The player
         const player2 = Player(context, 427, 360, gameArea); // The player
-        const gem = Gem(context, 427, 350, "green");        // The gem
+        const gem = Gem(context, 427, 350, "yellow");        // The gem
         
         gameAreaPoints = gameArea.getPoints();
         
@@ -91,6 +91,7 @@
             /* Update the sprites */
             player1.update(now);
             player2.update(now);
+            gem.update(now);
             
             // /* Clear the screen */
             context.clearRect(0, 0, cv.width, cv.height);
@@ -98,6 +99,7 @@
             // /* Draw the sprites */
             player1.draw();
             player2.draw();
+            gem.draw();
             
             // /* Process the next frame */
             requestAnimationFrame(doFrame);
@@ -129,7 +131,7 @@
                     if (event.keyCode == 37) {
                         player.move(1);
                         moveNum = 1
-                    }else if (event.keyCode == 38){
+                    }else if (event.keyCode == 38 && player.getJumping() != true){
                         player.setJumping(true);
                         player.setGroundLevel();
                         moveNum = 2;
