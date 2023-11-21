@@ -17,12 +17,12 @@ canvas, #counter, #game-start, #game-over {
 
 canvas, #game-start, #game-over {
     border: 1px solid gray;
-    width: 854px;
-    height: 480px;
+    width: 1245px;
+    height: 700px;
 }
 
 canvas {
-    background: url(media/background.png);
+    background: url(../media/playground.png);
     background-size: cover;
 }
 

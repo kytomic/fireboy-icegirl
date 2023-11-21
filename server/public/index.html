@@ -53,11 +53,11 @@
 
         
         /* Create the game area */
-        const gameArea = BoundingBox(context, 165, 60, 420, 800);
+        const gameArea = BoundingBox(context, 165, 60, 445, 800);
         
         /* Create the sprites in the game */
-        const player1 = Player(context, 427, 240, gameArea); // The player 1
-        const player2 = Player(context, 427, 360, gameArea); // The player 2
+        const player1 = Player(context, 100, 440, gameArea); // The player 1
+        const player2 = Player(context, 700, 440, gameArea); // The player 2
         const coins = [Coin(context, 427, 350), 
                        Coin(context, 327, 250),
                        Coin(context, 400, 300)];        // The coins
@@ -140,8 +140,8 @@
                         player.move(1);
                         moveNum = 1
                     }else if (event.keyCode == 38 && player.getJumping() != true){
-                        player.setJumping(true);
                         player.setGroundLevel();
+                        player.setJumping(true);
                         moveNum = 2;
                     }else if (event.keyCode == 39){
                         player.move(3);

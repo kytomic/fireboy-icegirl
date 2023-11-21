@@ -11,20 +11,18 @@ body {
 
 canvas, #counter, #game-start, #game-over {
   position: absolute;
-  top: 10vh;
-  left: 12vw;
+  top: 0;
+  left: 0;
 }
 
 canvas, #game-start, #game-over {
   border: 1px solid gray;
-  /* width: 854px; */
   width: 1245px;
   height: 700px;
-  /* height: 480px; */
 }
 
 canvas {
-  background: url(../media/background.jpg);
+  background: url(../media/playground.png);
   background-size: cover;
 }
 

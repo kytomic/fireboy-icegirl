@@ -40,7 +40,7 @@ const Player = function(ctx, x, y, gameArea) {
     let direction = 0;
 
     // This is the moving speed (pixels per second) of the player
-    let speed = 50;
+    let speed = 75;
 
     // This function sets the player's moving direction.
     // - `dir` - the moving direction (1: Left, 2: Up, 3: Right, 4: Down)
@@ -82,10 +82,12 @@ const Player = function(ctx, x, y, gameArea) {
 
     // Jumping logic
     let is_jumping = false;
-    let jumping_speed = 250;
+    let default_jumping_speed = 300;
+    let jumping_speed = default_jumping_speed;
     let ground_level = -1;
 
-    const setGroundLevel = function(value) {
+
+    const setGroundLevel = function() {
         let { x, y } = sprite.getXY();
         ground_level = y;
     }
@@ -104,13 +106,13 @@ const Player = function(ctx, x, y, gameArea) {
 
     const jump = function () {
         let { x, y } = sprite.getXY();
-        if (((y - jumping_speed / 60)) < ground_level) {
-            y -= jumping_speed / 60;
+        if (((y - jumping_speed / 40)) < getGroundLevel()) {
+            y -= jumping_speed / 40;
             jumping_speed -= 10;
         }else{
+            jumping_speed = default_jumping_speed;
             y = ground_level;
-            is_jumping = false;
-            jumping_speed = 250;
+            setJumping(false);
         }
         if (gameArea.isPointInBox(x, y)) 
             sprite.setXY(x, y);
@@ -140,6 +142,12 @@ const Player = function(ctx, x, y, gameArea) {
         sprite.update(time);
     };
 
+    let collected_coin = 0;
+
+    const coinIncrement = function() {
+        collected_coin++;
+    };
+
     // The methods are returned as an object here.
     return {
         move: move,
@@ -154,5 +162,6 @@ const Player = function(ctx, x, y, gameArea) {
         getGroundLevel: getGroundLevel,
         getJumping: getJumping,
         setJumping: setJumping,
+        coinIncrement: coinIncrement,
     };
 };

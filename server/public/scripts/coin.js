@@ -8,7 +8,7 @@ const Coin = function(ctx, x, y) {
     // This is the sprite sequences of the gem of four colours
     // `green`, `red`, `yellow` and `purple`.
     const sequences = {
-        x: 0, y:  0, width: 12, height: 24, count: 8, timing: 200, loop: true
+        x: 0, y:  0, width: 11, height: 24, count: 8, timing: 200, loop: true
     };
 
     // This is the sprite object of the gem created from the Sprite module.
