@@ -1,11 +1,251 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game</title>
+    <title>FireBoy and IceGirl Remastered</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="./style/style.css">
 </head>
 <body>
-    Hello World
+    <div id="game-container">
+        <canvas width="854px" height="480px"></canvas>
+
+        <!-- <svg xmlns="http://www.w3.org/2000/svg" id="counter">
+            <text x="10" y="35">
+                TIME:<tspan id="time-remaining">20</tspan>
+            </text>
+        </svg> -->
+
+        <svg xmlns="http://www.w3.org/2000/svg" id="game-start">
+            <text x="50%" y="60%">Click here to start the game</text>
+        </svg>
+
+        <!-- <svg xmlns="http://www.w3.org/2000/svg" id="game-over" style="display: none"></svg> -->
+    </div>
+
+    <script src="/socket.io/socket.io.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+    <script src="scripts/bounding_box.js"></script>
+    <script src="scripts/sprite.js"></script>
+    <script src="scripts/player.js"></script>
+    <script src="scripts/coin.js"></script>
+    <script src="scripts/door.js"></script>
+    <script src="scripts/bar.js"></script>
+    <script src="scripts/switch.js"></script>
+    <script src="scripts/socket.js"></script>
+
+    <script>    
+    $(document).ready(function() {
+        /* Get the canvas and 2D context */
+        const cv = $("canvas").get(0);
+        const context = cv.getContext("2d");
+        
+        /* Create the sounds */
+        const sounds = {
+            // background: new Audio("background.mp3"),
+            // collect: new Audio("collect.mp3"),
+            // gameover: new Audio("gameover.mp3")
+        };
+
+        const totalGameTime = 20;   // Total game time in seconds
+        let gameStartTime = 0;      // The timestamp when the game starts
+        let collectedCoins = 0;      // The number of coins collected in the game
+        let playerNum = null;
+        let player = null;
+        Socket.connect();
+        let socket = Socket.getSocket();
+
+        
+        /* Create the game area */
+        const gameArea = BoundingBox(context, 165, 60, 445, 800);
+        
+        /* Create the sprites in the game */
+        const player1 = Player(context, 100, 440, gameArea); // The player 1
+        const player2 = Player(context, 700, 440, gameArea); // The player 2
+        const coins = [Coin(context, 150, 430), 
+                       Coin(context, 550, 430),
+                       Coin(context, 300, 340),
+                       Coin(context, 650, 340),
+                       Coin(context, 200, 260),
+                       Coin(context, 800, 260),
+                       Coin(context, 250, 160),
+                       Coin(context, 700, 160),
+                       Coin(context, 80, 60),
+                       Coin(context, 780, 60)];        // The coins
+        const redDoor = Door(context, 340, 68, 'red');
+        const blueDoor = Door(context, 510, 68, 'blue');
+        const redBar = Bar(context, 78, 362, 'red');
+        const blueBar = Bar(context, 500, 272, 'blue');
+        const redSwitch = Switch(context, 770, 373, 'red');
+        const blueSwitch = Switch(context, 370, 292, 'blue');
+
+        gameAreaPoints = gameArea.getPoints();
+        
+        /* The main processing of the game */
+        function doFrame(now) {
+            if (gameStartTime == 0) gameStartTime = now;
+            
+            /* Update the time remaining */
+            const gameTimeSoFar = now - gameStartTime;
+            const timeRemaining = Math.ceil((totalGameTime * 1000 - gameTimeSoFar) / 1000);
+            $("#time-remaining").text(timeRemaining);
+            
+            /* Handle the game over situation here */
+            // $('#game-over').show();
+            
+            // Jumping logic
+            if (player1.getJumping() == true) {
+                player1.jump();
+            };
+
+            if (player2.getJumping() == true) {
+                player2.jump();
+            };
+
+            // Handling coin collection
+            coins.forEach(coin => {
+                if (coin.getBoundingBox().intersect(player1.getBoundingBox())) {
+                    player1.coinIncrement();
+                    coin.hide();
+                }else if (coin.getBoundingBox().intersect(player2.getBoundingBox())) {
+                    player2.coinIncrement();
+                    coin.hide();
+                }
+            })
+            
+            /* Update the sprites */
+            player1.update(now);
+            player2.update(now);
+            coins.forEach(coin => coin.update(now));
+            
+            // /* Clear the screen */
+            context.clearRect(0, 0, cv.width, cv.height);
+            
+            // /* Draw the sprites */
+            redDoor.draw();
+            blueDoor.draw();
+            redBar.draw();
+            blueBar.draw();
+            redSwitch.draw();
+            blueSwitch.draw();
+            coins.forEach(coin => coin.draw())
+
+            player1.draw();
+            player2.draw();
+            
+            // /* Process the next frame */
+            requestAnimationFrame(doFrame);
+        }
+        
+        
+        /* Handle the start of the game */
+        $("#game-start").on("click", function() {
+            /* Hide the start screen */
+            $("#game-start").hide();
+            // sounds.background.play();
+            socket.emit("assign player");
+            
+
+            socket.on("receive player", num => {
+                playerNum = num;
+
+                if (playerNum == '1') {
+                    console.log('Being player 1');
+                    player = player1;
+                }else if (playerNum == '2'){
+                    console.log('Being player 2');
+                    player = player2;
+                }
+
+                let moveNum = 0;
+                $(document).on("keydown", function(event) {
+                    /* Handle the key down */
+                    if (event.keyCode == 37) {
+                        player.move(1);
+                        moveNum = 1
+                    }else if (event.keyCode == 38 && player.getJumping() != true){
+                        player.setGroundLevel();
+                        player.setJumping(true);
+                        moveNum = 2;
+                    }else if (event.keyCode == 39){
+                        player.move(3);
+                        moveNum = 3
+                    }else if (event.keyCode == 40){
+                        player.move(4);
+                        moveNum = 4
+                    }
+
+                    // Send character movement to server for synchronised animation
+                    if (playerNum == 1) {
+                        socket.emit('player1 move', moveNum.toString());
+                    }else{
+                        socket.emit('player2 move', moveNum.toString());
+                    }
+                });
+
+                /* Handle the keyup of arrow keys and spacebar */
+                let stopNum = 0;
+                $(document).on("keyup", function(event) {
+                    /* Handle the key up */
+                    if (event.keyCode == 37) {
+                        player.stop(1);
+                        stopNum = 1;
+                    }else if (event.keyCode == 38){
+                        // player.stop(2);
+                        // stopNum = 2;
+                    }else if (event.keyCode == 39){
+                        player.stop(3);
+                        stopNum = 3;
+                    }else if (event.keyCode == 40){
+                        player.stop(4);
+                        stopNum = 4;
+                    }
+
+                    // Send character movement to server for synchronised animation
+                    if (playerNum == 1) {
+                        socket.emit('player1 stop', stopNum.toString());
+                    }else{
+                        socket.emit('player2 stop', stopNum.toString());
+                    }
+                });
+
+
+                // Receive other player's animation
+                if (player == player1) {
+                    socket.on('move player2', (num) => {
+                        num = Number(num);
+                        if (num == 2) {
+                            player2.setJumping(true);
+                            player2.setGroundLevel();
+                        } else {
+                            player2.move(num);
+                        }
+                    });
+                    socket.on('stop player2', (num) => {
+                        num = Number(num);
+                        player2.stop(num);
+                    });
+                } else if (player == player2) {
+                    socket.on('move player1', (num) => {
+                        num = Number(num);
+                        if (num == 2) {
+                            player1.setJumping(true);
+                            player1.setGroundLevel();
+                        } else {
+                            player1.move(num);
+                        }
+                    });
+                    socket.on('stop player1', (num) => {
+                        num = Number(num);
+                        player1.stop(num);
+                    });
+                }
+            });
+        
+        
+            /* Start the game */
+            requestAnimationFrame(doFrame);
+        });
+    });
+    </script>
 </body>
 </html>

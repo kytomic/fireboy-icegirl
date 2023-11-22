@@ -10,19 +10,8 @@ const cors = require('cors');
 app.use(express.static('public'));
 app.use(express.json());
 
-const corsOptions = {
-    origin: 'http://localhost:3000',
-    methods: 'GET, PUT, POST, DELETE',
-};
-
-app.use(cors(corsOptions));
-
-const io = new Server(httpServer, {
-    cors: {
-        origin: 'http://localhost:3000',
-        methods: ['GET', 'POST'],
-    }
-});
+const io = new Server(httpServer);
+let playerCount = 0; 
 
 // Http server connection
 httpServer.listen(8000, () => {
@@ -30,5 +19,17 @@ httpServer.listen(8000, () => {
 })
 
 io.on('connection', (socket) => {
-    console.log('Socket ID: ', socket.id);
+    socket.on('assign player', () => {
+        playerCount++;
+        if (playerCount > 2) {
+            playerCount = 1;
+        }
+        socket.emit('receive player', playerCount.toString());
+    });
+
+    socket.on('player1 move', (num) => {io.emit('move player1', num)})
+    socket.on('player2 move', (num) => {io.emit('move player2', num)})
+    socket.on('player1 stop', (num) => {io.emit('stop player1', num)})
+    socket.on('player2 stop', (num) => {io.emit('stop player2', num)})
+
 });
