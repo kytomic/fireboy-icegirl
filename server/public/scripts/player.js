@@ -106,8 +106,8 @@ const Player = function(ctx, x, y, gameArea) {
 
     const jump = function () {
         let { x, y } = sprite.getXY();
-        if (((y - jumping_speed / 40)) < getGroundLevel()) {
-            y -= jumping_speed / 40;
+        if (((y - jumping_speed / 45)) < getGroundLevel()) {
+            y -= jumping_speed / 45;
             jumping_speed -= 10;
         }else{
             jumping_speed = default_jumping_speed;

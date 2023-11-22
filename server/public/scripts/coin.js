@@ -16,7 +16,7 @@ const Coin = function(ctx, x, y) {
 
     // The sprite object is configured for the gem sprite here.
     sprite.setSequence(sequences)
-          .setScale(2)
+          .setScale(1.5)
           .setShadowScale({ x: 0.75, y: 0.2 })
           .useSheet("../media/coin.png");
 
