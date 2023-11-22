@@ -3,7 +3,7 @@
 // - `x` - The initial x position of the player
 // - `y` - The initial y position of the player
 // - `gameArea` - The bounding box of the game area
-const Player = function(ctx, x, y, gameArea) {
+const Player = function(ctx, x, y, movingBoxes) {
 
     // This is the sprite sequences of the player facing different directions.
     // It contains the idling sprite sequences `idleLeft`, `idleUp`, `idleRight` and `idleDown`,
@@ -27,7 +27,7 @@ const Player = function(ctx, x, y, gameArea) {
 
     // The sprite object is configured for the player sprite here.
     sprite.setSequence(sequences.idleDown)
-          .setScale(2)
+          .setScale(1.5)
           .setShadowScale({ x: 0.75, y: 0.20 })
           .useSheet("../media/player_sprite.png");
 
@@ -82,19 +82,8 @@ const Player = function(ctx, x, y, gameArea) {
 
     // Jumping logic
     let is_jumping = false;
-    let default_jumping_speed = 300;
-    let jumping_speed = default_jumping_speed;
-    let ground_level = -1;
-
-
-    const setGroundLevel = function() {
-        let { x, y } = sprite.getXY();
-        ground_level = y;
-    }
-
-    const getGroundLevel = function() {
-        return ground_level;
-    }
+    let jumping_speed = 300;
+    let falling_speed = 5;
 
     const setJumping = function(value) {
         is_jumping = value;
@@ -106,17 +95,58 @@ const Player = function(ctx, x, y, gameArea) {
 
     const jump = function () {
         let { x, y } = sprite.getXY();
-        if (((y - jumping_speed / 45)) < getGroundLevel()) {
-            y -= jumping_speed / 45;
+        let valid_move = false;
+        let lowest_bottom = 9999;
+
+        box = null;
+        movingBoxes.forEach(movingBox => {
+            if (movingBox.isPointInBox(x, y)) {
+                valid_move = true;
+                box = movingBox;
+                if (movingBox.getBottom() < lowest_bottom) {
+                    lowest_bottom = movingBox.getBottom();
+                }
+            }
+        });
+        
+        next_y = y - jumping_speed / 40;
+        if (next_y < lowest_bottom && box.isPointInBox(x, next_y)) {
+            y = next_y;
             jumping_speed -= 10;
         }else{
-            jumping_speed = default_jumping_speed;
-            y = ground_level;
+            jumping_speed = 300;
+            y = lowest_bottom;
             setJumping(false);
         }
-        if (gameArea.isPointInBox(x, y)) 
+        
+        if (valid_move)
             sprite.setXY(x, y);
     };
+
+    const fall = function() {
+        let { x, y } = sprite.getXY();
+        let lowest_bottom = 9999;
+
+        movingBoxes.forEach(movingBox => {
+            if (movingBox.isPointInBox(x, y)) {
+                box = movingBox;
+                if (movingBox.getBottom() < lowest_bottom) {
+                    lowest_bottom = movingBox.getBottom();
+                }
+            }
+        });
+
+        next_y = y + falling_speed / 20;
+        if (next_y < lowest_bottom) {
+            y = next_y;
+            falling_speed += 1;
+        }else{
+            falling_speed = 5;
+            y = lowest_bottom;
+        }
+        
+        sprite.setXY(x, y);
+    }
 
     // This function updates the player depending on his movement.
     // - `time` - The timestamp when this function is called
@@ -128,13 +158,19 @@ const Player = function(ctx, x, y, gameArea) {
             /* Move the player */
             switch (direction) {
                 case 1: x -= speed / 60; break;
-                case 2: /*y -= speed / 60;*/ break;
                 case 3: x += speed / 60; break;
                 case 4: y += speed / 60; break;
             }
 
+            let valid_move = false;
+            movingBoxes.forEach(movingBox => {
+                if (movingBox.isPointInBox(x, y)) {
+                    valid_move = true;
+                }
+            });
+            
             /* Set the new position if it is within the game area */
-            if (gameArea.isPointInBox(x, y))
+            if (valid_move)
                 sprite.setXY(x, y);
         }
 
@@ -158,8 +194,7 @@ const Player = function(ctx, x, y, gameArea) {
         draw: sprite.draw,
         update: update,
         jump: jump,
-        setGroundLevel: setGroundLevel,
-        getGroundLevel: getGroundLevel,
+        fall: fall,
         getJumping: getJumping,
         setJumping: setJumping,
         coinIncrement: coinIncrement,

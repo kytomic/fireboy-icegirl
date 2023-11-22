@@ -56,11 +56,33 @@
 
         
         /* Create the game area */
-        const gameArea = BoundingBox(context, 165, 60, 445, 800);
-        
+        // top, left, bottom, right
+        const movingBoxes1 = [
+            BoundingBox(context, 400, 25, 440, 280),
+            BoundingBox(context, 315, 280, 440, 400),
+            BoundingBox(context, 315, 25, 360, 265),
+            BoundingBox(context, 228, 25, 360, 120),
+            BoundingBox(context, 228, 120, 280, 300),
+            BoundingBox(context, 135, 300, 280, 400),
+            BoundingBox(context, 135, 25, 190, 300),
+            BoundingBox(context, 20, 25, 190, 120),
+            BoundingBox(context, 20, 120, 106, 400),
+        ];
+        const movingBoxes2 = [
+            BoundingBox(context, 400, 450, 440, 820),
+            BoundingBox(context, 315, 450, 440, 580),
+            BoundingBox(context, 315, 580, 360, 820),
+            BoundingBox(context, 228, 720, 360, 820),
+            BoundingBox(context, 228, 450, 280, 720),
+            BoundingBox(context, 135, 450, 280, 575),
+            BoundingBox(context, 135, 575, 190, 820),
+            BoundingBox(context, 20, 720, 190, 820),
+            BoundingBox(context, 20, 450, 106, 720),
+        ];
+
         /* Create the sprites in the game */
-        const player1 = Player(context, 100, 440, gameArea); // The player 1
-        const player2 = Player(context, 700, 440, gameArea); // The player 2
+        const player1 = Player(context, 100, 440, movingBoxes1); // The player 1
+        const player2 = Player(context, 700, 440, movingBoxes2); // The player 2
         const coins = [Coin(context, 150, 430), 
                        Coin(context, 550, 430),
                        Coin(context, 300, 340),
@@ -77,8 +99,6 @@
         const blueBar = Bar(context, 500, 272, 'blue');
         const redSwitch = Switch(context, 770, 373, 'red');
         const blueSwitch = Switch(context, 370, 292, 'blue');
-
-        gameAreaPoints = gameArea.getPoints();
         
         /* The main processing of the game */
         function doFrame(now) {
@@ -95,11 +115,15 @@
             // Jumping logic
             if (player1.getJumping() == true) {
                 player1.jump();
-            };
+            }else{
+                player1.fall();
+            }
 
             if (player2.getJumping() == true) {
                 player2.jump();
-            };
+            }else{
+                player2.fall();
+            }
 
             // Handling coin collection
             coins.forEach(coin => {
@@ -163,7 +187,6 @@
                         player.move(1);
                         moveNum = 1
                     }else if (event.keyCode == 38 && player.getJumping() != true){
-                        player.setGroundLevel();
                         player.setJumping(true);
                         moveNum = 2;
                     }else if (event.keyCode == 39){
@@ -189,9 +212,6 @@
                     if (event.keyCode == 37) {
                         player.stop(1);
                         stopNum = 1;
-                    }else if (event.keyCode == 38){
-                        // player.stop(2);
-                        // stopNum = 2;
                     }else if (event.keyCode == 39){
                         player.stop(3);
                         stopNum = 3;
