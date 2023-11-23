@@ -3,7 +3,7 @@
 // - `x` - The initial x position of the player
 // - `y` - The initial y position of the player
 // - `gameArea` - The bounding box of the game area
-const Player = function(ctx, x, y, movingBoxes) {
+const Player = function(ctx, x, y, boxes) {
 
     // This is the sprite sequences of the player facing different directions.
     // It contains the idling sprite sequences `idleLeft`, `idleUp`, `idleRight` and `idleDown`,
@@ -84,6 +84,7 @@ const Player = function(ctx, x, y, movingBoxes) {
     let is_jumping = false;
     let jumping_speed = 300;
     let falling_speed = 5;
+    let movingBoxes = boxes;
 
     const setJumping = function(value) {
         is_jumping = value;
@@ -91,6 +92,10 @@ const Player = function(ctx, x, y, movingBoxes) {
 
     const getJumping = function() {
         return is_jumping;
+    }
+
+    const setMovingBoxes = function(newBoxes) {
+        movingBoxes = newBoxes;
     }
 
     const jump = function () {
@@ -195,6 +200,7 @@ const Player = function(ctx, x, y, movingBoxes) {
         update: update,
         jump: jump,
         fall: fall,
+        setMovingBoxes: setMovingBoxes,
         getJumping: getJumping,
         setJumping: setJumping,
         coinIncrement: coinIncrement,

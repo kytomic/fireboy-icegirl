@@ -57,25 +57,26 @@
         
         /* Create the game area */
         // top, left, bottom, right
-        const movingBoxes1 = [
+        let movingBoxes1 = [
             BoundingBox(context, 400, 25, 440, 280),
             BoundingBox(context, 315, 280, 440, 400),
-            BoundingBox(context, 315, 25, 360, 265),
-            BoundingBox(context, 228, 25, 360, 120),
+            BoundingBox(context, 315, 25, 360, 280),
+            BoundingBox(context, 315, 25, 360, 120),
             BoundingBox(context, 228, 120, 280, 300),
             BoundingBox(context, 135, 300, 280, 400),
             BoundingBox(context, 135, 25, 190, 300),
             BoundingBox(context, 20, 25, 190, 120),
             BoundingBox(context, 20, 120, 106, 400),
         ];
-        const movingBoxes2 = [
+        let movingBoxes2 = [
             BoundingBox(context, 400, 450, 440, 820),
             BoundingBox(context, 315, 450, 440, 580),
             BoundingBox(context, 315, 580, 360, 820),
             BoundingBox(context, 228, 720, 360, 820),
             BoundingBox(context, 228, 450, 280, 720),
-            BoundingBox(context, 135, 450, 280, 575),
-            BoundingBox(context, 135, 575, 190, 820),
+            BoundingBox(context, 228, 450, 280, 560),
+            // BoundingBox(context, 135, 450, 280, 560),
+            BoundingBox(context, 135, 560, 190, 820),
             BoundingBox(context, 20, 720, 190, 820),
             BoundingBox(context, 20, 450, 106, 720),
         ];
@@ -125,6 +126,19 @@
                 player2.fall();
             }
 
+            if (redSwitch.getTriggerState() == false) {
+                if (redSwitch.checkTrigger(player2) == true) {
+                    movingBoxes1 = redBar.move(movingBoxes1);
+                    player1.setMovingBoxes(movingBoxes1);
+                }
+            }
+            if (blueSwitch.getTriggerState() == false) {
+                if (blueSwitch.checkTrigger(player1) == true) {
+                    movingBoxes2 = blueBar.move(movingBoxes2);
+                    player2.setMovingBoxes(movingBoxes2);
+                }
+            }
+
             // Handling coin collection
             coins.forEach(coin => {
                 if (coin.getBoundingBox().intersect(player1.getBoundingBox())) {
@@ -135,10 +149,12 @@
                     coin.hide();
                 }
             })
-            
+
             /* Update the sprites */
             player1.update(now);
             player2.update(now);
+            redBar.update(now);
+            blueBar.update(now);
             coins.forEach(coin => coin.update(now));
             
             // /* Clear the screen */
@@ -235,7 +251,6 @@
                         num = Number(num);
                         if (num == 2) {
                             player2.setJumping(true);
-                            player2.setGroundLevel();
                         } else {
                             player2.move(num);
                         }
@@ -249,7 +264,6 @@
                         num = Number(num);
                         if (num == 2) {
                             player1.setJumping(true);
-                            player1.setGroundLevel();
                         } else {
                             player1.move(num);
                         }
