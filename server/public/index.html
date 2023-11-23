@@ -126,6 +126,7 @@
                 player2.fall();
             }
 
+            // Handling bar-switch logic
             if (redSwitch.getTriggerState() == false) {
                 if (redSwitch.checkTrigger(player2) == true) {
                     movingBoxes1 = redBar.move(movingBoxes1);
@@ -150,11 +151,30 @@
                 }
             })
 
+            // Handling winning logic
+            let redDoorArrived = redDoor.getBoundingBox().intersect(player1.getBoundingBox());
+            let blueDoorArrived = blueDoor.getBoundingBox().intersect(player2.getBoundingBox());
+            if (redDoorArrived) {
+                redDoor.arrivedEffect()
+            }else{
+                redDoor.closedEffect();
+            }    
+            if (blueDoorArrived) {
+                blueDoor.arrivedEffect()
+            }else{
+                blueDoor.closedEffect();
+            } 
+            if (redDoorArrived && blueDoorArrived) {
+                // console.log('Win the game!!');
+            }
+
             /* Update the sprites */
             player1.update(now);
             player2.update(now);
             redBar.update(now);
+            redDoor.update(now);
             blueBar.update(now);
+            blueDoor.update(now);
             coins.forEach(coin => coin.update(now));
             
             // /* Clear the screen */
