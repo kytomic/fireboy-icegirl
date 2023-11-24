@@ -75,7 +75,6 @@
             BoundingBox(context, 228, 720, 360, 820),
             BoundingBox(context, 228, 450, 280, 720),
             BoundingBox(context, 228, 450, 280, 560),
-            // BoundingBox(context, 135, 450, 280, 560),
             BoundingBox(context, 135, 560, 190, 820),
             BoundingBox(context, 20, 720, 190, 820),
             BoundingBox(context, 20, 450, 106, 720),
@@ -112,20 +111,17 @@
             
             /* Handle the game over situation here */
             // $('#game-over').show();
+
+            // Receive other player's animation
             
             // Jumping logic
-            if (player1.getJumping() == true) {
-                player1.jump();
-            }else{
-                player1.fall();
+            if (player != null && player.getJumping() == true) {
+                player.jump(socket, playerNum);
+            }else if (player != null){
+                player.fall(socket, playerNum);
             }
 
-            if (player2.getJumping() == true) {
-                player2.jump();
-            }else{
-                player2.fall();
-            }
-
+                        
             // Handling bar-switch logic
             if (redSwitch.getTriggerState() == false) {
                 if (redSwitch.checkTrigger(player2) == true) {
@@ -139,7 +135,7 @@
                     player2.setMovingBoxes(movingBoxes2);
                 }
             }
-
+            
             // Handling coin collection
             coins.forEach(coin => {
                 if (coin.getBoundingBox().intersect(player1.getBoundingBox())) {
@@ -150,7 +146,7 @@
                     coin.hide();
                 }
             })
-
+            
             // Handling winning logic
             let redDoorArrived = redDoor.getBoundingBox().intersect(player1.getBoundingBox());
             let blueDoorArrived = blueDoor.getBoundingBox().intersect(player2.getBoundingBox());
@@ -167,7 +163,7 @@
             if (redDoorArrived && blueDoorArrived) {
                 // console.log('Win the game!!');
             }
-
+            
             /* Update the sprites */
             player1.update(now);
             player2.update(now);
@@ -188,7 +184,7 @@
             redSwitch.draw();
             blueSwitch.draw();
             coins.forEach(coin => coin.draw())
-
+            
             player1.draw();
             player2.draw();
             
@@ -204,10 +200,10 @@
             // sounds.background.play();
             socket.emit("assign player");
             
-
+            
             socket.on("receive player", num => {
                 playerNum = num;
-
+                
                 if (playerNum == '1') {
                     console.log('Being player 1');
                     player = player1;
@@ -264,8 +260,6 @@
                     }
                 });
 
-
-                // Receive other player's animation
                 if (player == player1) {
                     socket.on('move player2', (num) => {
                         num = Number(num);
@@ -279,6 +273,12 @@
                         num = Number(num);
                         player2.stop(num);
                     });
+                    socket.on('jump player2', (cor) => {
+                        player2.setXY(cor.x, cor.y)
+                    })
+                    socket.on('fall player2', (cor) => {
+                        player2.setXY(cor.x, cor.y)
+                    })
                 } else if (player == player2) {
                     socket.on('move player1', (num) => {
                         num = Number(num);
@@ -292,7 +292,14 @@
                         num = Number(num);
                         player1.stop(num);
                     });
+                    socket.on('jump player1', (cor) => {
+                        player1.setXY(cor.x, cor.y)
+                    })
+                    socket.on('fall player1', (cor) => {
+                        player1.setXY(cor.x, cor.y)
+                    })
                 }
+
             });
         
         

@@ -98,7 +98,7 @@ const Player = function(ctx, x, y, boxes) {
         movingBoxes = newBoxes;
     }
 
-    const jump = function () {
+    const jump = function (socket, playerNum) {
         let { x, y } = sprite.getXY();
         let valid_move = false;
         let lowest_bottom = 9999;
@@ -124,11 +124,14 @@ const Player = function(ctx, x, y, boxes) {
             setJumping(false);
         }
         
-        if (valid_move)
+        if (valid_move) {
             sprite.setXY(x, y);
+            let coordinates = {x: x, y: y};
+            socket.emit('player' + playerNum.toString() + ' jump', coordinates);
+        }
     };
 
-    const fall = function() {
+    const fall = function(socket, playerNum) {
         let { x, y } = sprite.getXY();
         let lowest_bottom = 9999;
 
@@ -151,6 +154,8 @@ const Player = function(ctx, x, y, boxes) {
         }
         
         sprite.setXY(x, y);
+        let coordinates = {x: x, y: y};
+        socket.emit('player' + playerNum.toString() + ' jump', coordinates);
     }
 
     // This function updates the player depending on his movement.
@@ -204,5 +209,7 @@ const Player = function(ctx, x, y, boxes) {
         getJumping: getJumping,
         setJumping: setJumping,
         coinIncrement: coinIncrement,
+        getXY: sprite.getXY,
+        setXY: sprite.setXY
     };
 };
