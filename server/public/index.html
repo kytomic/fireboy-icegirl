@@ -19,6 +19,10 @@
             <text x="50%" y="60%">Click here to start the game</text>
         </svg>
 
+        <svg xmlns="http://www.w3.org/2000/svg" id="game-end">
+            <text x="50%" y="60%">You Win the Game!</text>
+        </svg>
+
         <!-- <svg xmlns="http://www.w3.org/2000/svg" id="game-over" style="display: none"></svg> -->
     </div>
 
@@ -54,6 +58,7 @@
         Socket.connect();
         let socket = Socket.getSocket();
 
+        $('#game-end').hide();
         
         /* Create the game area */
         // top, left, bottom, right
@@ -98,7 +103,7 @@
         const redBar = Bar(context, 78, 362, 'red');
         const blueBar = Bar(context, 500, 272, 'blue');
         const redSwitch = Switch(context, 770, 373, 'red');
-        const blueSwitch = Switch(context, 370, 292, 'blue');
+        const blueSwitch = Switch(context, 370, 290, 'blue');
         
         /* The main processing of the game */
         function doFrame(now) {
@@ -112,8 +117,7 @@
             /* Handle the game over situation here */
             // $('#game-over').show();
 
-            // Receive other player's animation
-            
+
             // Jumping logic
             if (player != null && player.getJumping() == true) {
                 player.jump(socket, playerNum);
@@ -161,7 +165,8 @@
                 blueDoor.closedEffect();
             } 
             if (redDoorArrived && blueDoorArrived) {
-                // console.log('Win the game!!');
+                $('#game-start').hide();
+                $('#game-end').show();
             }
             
             /* Update the sprites */
@@ -230,13 +235,9 @@
                     }
 
                     // Send character movement to server for synchronised animation
-                    if (playerNum == 1) {
-                        socket.emit('player1 move', moveNum.toString());
-                    }else{
-                        socket.emit('player2 move', moveNum.toString());
-                    }
+                    socket.emit('player' + playerNum.toString() + ' move', moveNum.toString());
                 });
-
+                
                 /* Handle the keyup of arrow keys and spacebar */
                 let stopNum = 0;
                 $(document).on("keyup", function(event) {
@@ -251,13 +252,9 @@
                         player.stop(4);
                         stopNum = 4;
                     }
-
+                    
                     // Send character movement to server for synchronised animation
-                    if (playerNum == 1) {
-                        socket.emit('player1 stop', stopNum.toString());
-                    }else{
-                        socket.emit('player2 stop', stopNum.toString());
-                    }
+                    socket.emit('player' + playerNum.toString() + ' stop', stopNum.toString());
                 });
 
                 if (player == player1) {

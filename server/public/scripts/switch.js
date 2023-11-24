@@ -24,7 +24,7 @@ const Switch = function(ctx, x, y, color) {
 
     const checkTrigger = function(player) {
         const switchBox = sprite.getBoundingBox();
-        if (switchBox.intersect(player.getBoundingBox())) {
+        if (switchBox.intersect(player.getBoundingBox()) && sprite.getXY().y > player.getXY().y) {
             is_triggered = true;
             sprite.setSequence(sequences['triggerred']);
             return true;
