@@ -3,22 +3,24 @@ body {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  overflow-y: hidden; /* Hide vertical scrollbar */
+  overflow-x: hidden; /* Hide horizontal scrollbar */
 }
 
 #game-container {
   position: relative;
 }
 
-canvas, #counter, #game-start, #game-over {
+canvas, #counter, #game-start, #game-over, #game-end {
   position: absolute;
   top: 0;
   left: 0;
+  width: 854px;
+  height: 480px;
 }
 
 canvas, #game-start, #game-over {
   border: 1px solid gray;
-  width: 1245px;
-  height: 700px;
 }
 
 canvas {
@@ -26,8 +28,14 @@ canvas {
   background-size: cover;
 }
 
-#game-start, #game-over {
+#game-start, #game-over, #game-end {
   background: rgba(1, 1, 1, 0.8);
+}
+
+#game-over text, #game-end text {
+  font-size: 150%;
+  text-anchor: middle;
+  fill: white;
 }
 
 #counter text {
@@ -47,10 +55,4 @@ canvas {
   font-size: 400%;
   fill: url(#title-fill);
   stroke: black;
-}
-
-#game-over text {
-  font-size: 120%;
-  fill: url(#game-over-fill);
-  text-anchor: middle;
 }/*# sourceMappingURL=style.css.map */

@@ -21,7 +21,6 @@ const Coin = function(ctx, x, y) {
           .useSheet("../media/coin.png");
 
     const hide = function() {
-        console.log('Hide');
         sprite.setXY(1245, 700);
     };
 
