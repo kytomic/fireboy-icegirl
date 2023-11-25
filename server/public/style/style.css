@@ -19,7 +19,7 @@ canvas, #counter, #game-start, #game-over, #game-end {
   height: 480px;
 }
 
-canvas, #game-start, #game-over, #game-end {
+canvas, #game-start, #game-over {
   border: 1px solid gray;
 }
 
@@ -30,6 +30,12 @@ canvas {
 
 #game-start, #game-over, #game-end {
   background: rgba(1, 1, 1, 0.8);
+}
+
+#game-over text, #game-end text {
+  font-size: 150%;
+  text-anchor: middle;
+  fill: white;
 }
 
 #counter text {
@@ -45,20 +51,8 @@ canvas {
   text-anchor: middle;
 }
 
-#game-end text {
-  font-size: 150%;
-  fill: white;
-  text-anchor: middle;
-}
-
 #game-start #game-title {
   font-size: 400%;
   fill: url(#title-fill);
   stroke: black;
-}
-
-#game-over text {
-  font-size: 120%;
-  fill: url(#game-over-fill);
-  text-anchor: middle;
 }/*# sourceMappingURL=style.css.map */

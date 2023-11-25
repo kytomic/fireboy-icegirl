@@ -22,8 +22,10 @@
         <svg xmlns="http://www.w3.org/2000/svg" id="game-end">
             <text x="50%" y="60%">You Win the Game!</text>
         </svg>
-
-        <!-- <svg xmlns="http://www.w3.org/2000/svg" id="game-over" style="display: none"></svg> -->
+        
+        <svg xmlns="http://www.w3.org/2000/svg" id="game-over">
+            <text x="50%" y="60%">You Lose the Game!</text>
+        </svg>
     </div>
 
     <script src="/socket.io/socket.io.min.js"></script>
@@ -36,6 +38,7 @@
     <script src="scripts/bar.js"></script>
     <script src="scripts/switch.js"></script>
     <script src="scripts/socket.js"></script>
+    <script src="scripts/fire.js"></script>
 
     <script>    
     $(document).ready(function() {
@@ -57,8 +60,8 @@
         let player = null;
         Socket.connect();
         let socket = Socket.getSocket();
-
-        $('#game-end').hide();
+        let is_gameover = false;
+        let is_gameend = false;
         
         /* Create the game area */
         // top, left, bottom, right
@@ -88,23 +91,38 @@
         /* Create the sprites in the game */
         const player1 = Player(context, 100, 440, movingBoxes1); // The player 1
         const player2 = Player(context, 700, 440, movingBoxes2); // The player 2
-        const coins = [Coin(context, 150, 430), 
-                       Coin(context, 550, 430),
-                       Coin(context, 300, 340),
-                       Coin(context, 650, 340),
-                       Coin(context, 200, 260),
-                       Coin(context, 800, 260),
-                       Coin(context, 250, 160),
-                       Coin(context, 700, 160),
-                       Coin(context, 80, 60),
-                       Coin(context, 780, 60)];        // The coins
+        const coins = [
+            Coin(context, 150, 430), 
+            Coin(context, 550, 430),
+            Coin(context, 300, 340),
+            Coin(context, 650, 340),
+            Coin(context, 200, 260),
+            Coin(context, 750, 260),
+            Coin(context, 250, 160),
+            Coin(context, 700, 160),
+            Coin(context, 80, 60),
+            Coin(context, 650, 60)];        // The coins
         const redDoor = Door(context, 340, 68, 'red');
         const blueDoor = Door(context, 510, 68, 'blue');
         const redBar = Bar(context, 78, 362, 'red');
         const blueBar = Bar(context, 500, 272, 'blue');
         const redSwitch = Switch(context, 770, 373, 'red');
         const blueSwitch = Switch(context, 370, 290, 'blue');
+        const fires = [
+            Fire(context, 347, 442),
+            Fire(context, 365, 442),
+            Fire(context, 382, 442),
+            Fire(context, 398, 442),
+            Fire(context, 28, 190),
+            Fire(context, 48, 190),
+            Fire(context, 820, 360),
+            Fire(context, 800, 190),
+            Fire(context, 820, 190),
+        ]
         
+        $('#game-over').hide();
+        $('#game-end').hide();
+
         /* The main processing of the game */
         function doFrame(now) {
             if (gameStartTime == 0) gameStartTime = now;
@@ -115,7 +133,6 @@
             $("#time-remaining").text(timeRemaining);
             
             /* Handle the game over situation here */
-            // $('#game-over').show();
 
 
             // Jumping logic
@@ -144,10 +161,19 @@
             coins.forEach(coin => {
                 if (coin.getBoundingBox().intersect(player1.getBoundingBox())) {
                     player1.coinIncrement();
+                    console.log('player1 Score: ', player1.getCollectedCoin())
                     coin.hide();
                 }else if (coin.getBoundingBox().intersect(player2.getBoundingBox())) {
                     player2.coinIncrement();
+                    console.log('player2 Score: ', player2.getCollectedCoin())
                     coin.hide();
+                }
+            })
+
+            // Handling game-over logic
+            fires.forEach(fire => {
+                if (fire.getBoundingBox().intersect(player1.getBoundingBox()) || fire.getBoundingBox().intersect(player2.getBoundingBox())) {
+                    $('#game-over').show();
                 }
             })
             
@@ -177,6 +203,7 @@
             blueBar.update(now);
             blueDoor.update(now);
             coins.forEach(coin => coin.update(now));
+            fires.forEach(fire => fire.update(now));
             
             // /* Clear the screen */
             context.clearRect(0, 0, cv.width, cv.height);
@@ -189,6 +216,7 @@
             redSwitch.draw();
             blueSwitch.draw();
             coins.forEach(coin => coin.draw())
+            fires.forEach(fire => fire.draw())
             
             player1.draw();
             player2.draw();

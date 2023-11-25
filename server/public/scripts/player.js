@@ -194,6 +194,10 @@ const Player = function(ctx, x, y, boxes) {
         collected_coin++;
     };
 
+    const getCollectedCoin = function() {
+        return collected_coin;
+    }
+
     // The methods are returned as an object here.
     return {
         move: move,
@@ -210,6 +214,7 @@ const Player = function(ctx, x, y, boxes) {
         setJumping: setJumping,
         coinIncrement: coinIncrement,
         getXY: sprite.getXY,
-        setXY: sprite.setXY
+        setXY: sprite.setXY,
+        getCollectedCoin: getCollectedCoin
     };
 };
