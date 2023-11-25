@@ -4,6 +4,7 @@
     <title>FireBoy and IceGirl Remastered</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="./style/style.css">
+    <link rel="shortcut icon" href="#">
 </head>
 <body>
     <div id="game-container">
@@ -20,11 +21,29 @@
         </svg>
 
         <svg xmlns="http://www.w3.org/2000/svg" id="game-end">
-            <text x="50%" y="60%">You Win the Game!</text>
+            <text x="50%" y="30%">You Win the Game!</text>
+            <g class="restart-button">
+                <rect x="40%" y="55%" rx="5" ry="5" width="20%" height="10%"/>
+                <text x="50%" y="62%">Restart</text>
+            </g>
+
+            <g class="menu-button">
+                <rect x="35%" y="70%" rx="5" ry="5" width="30%" height="10%"/>
+                <text x="50%" y="77%">To Main Menu</text>
+            </g>
         </svg>
         
-        <svg xmlns="http://www.w3.org/2000/svg" id="game-over">
-            <text x="50%" y="60%">You Lose the Game!</text>
+        <svg xmlns="http://www.w3.org/2000/svg" id="game-over">        
+            <text x="50%" y="30%">You Lose the Game!</text>
+            <g class="restart-button">
+                <rect x="40%" y="55%" rx="5" ry="5" width="20%" height="10%"/>
+                <text x="50%" y="62%">Restart</text>
+            </g>
+
+            <g class="menu-button">
+                <rect x="35%" y="70%" rx="5" ry="5" width="30%" height="10%"/>
+                <text x="50%" y="77%">To Main Menu</text>
+            </g>
         </svg>
     </div>
 
@@ -45,12 +64,12 @@
         /* Get the canvas and 2D context */
         const cv = $("canvas").get(0);
         const context = cv.getContext("2d");
-        
+
         /* Create the sounds */
         const sounds = {
-            // background: new Audio("background.mp3"),
-            // collect: new Audio("collect.mp3"),
-            // gameover: new Audio("gameover.mp3")
+            background: new Audio("./media/background.mp3"),
+            collect: new Audio("./media/collect.mp3"),
+            trigger: new Audio("./media/trigger.mp3")
         };
 
         const totalGameTime = 20;   // Total game time in seconds
@@ -146,12 +165,14 @@
             // Handling bar-switch logic
             if (redSwitch.getTriggerState() == false) {
                 if (redSwitch.checkTrigger(player2) == true) {
+                    sounds.trigger.play();
                     movingBoxes1 = redBar.move(movingBoxes1);
                     player1.setMovingBoxes(movingBoxes1);
                 }
             }
             if (blueSwitch.getTriggerState() == false) {
                 if (blueSwitch.checkTrigger(player1) == true) {
+                    sounds.trigger.play();
                     movingBoxes2 = blueBar.move(movingBoxes2);
                     player2.setMovingBoxes(movingBoxes2);
                 }
@@ -160,20 +181,23 @@
             // Handling coin collection
             coins.forEach(coin => {
                 if (coin.getBoundingBox().intersect(player1.getBoundingBox())) {
+                    sounds.collect.play();
                     player1.coinIncrement();
-                    console.log('player1 Score: ', player1.getCollectedCoin())
+                    // console.log('player1 Score: ', player1.getCollectedCoin())
                     coin.hide();
                 }else if (coin.getBoundingBox().intersect(player2.getBoundingBox())) {
+                    sounds.collect.play();
                     player2.coinIncrement();
-                    console.log('player2 Score: ', player2.getCollectedCoin())
+                    // console.log('player2 Score: ', player2.getCollectedCoin())
                     coin.hide();
                 }
             })
 
             // Handling game-over logic
             fires.forEach(fire => {
-                if (fire.getBoundingBox().intersect(player1.getBoundingBox()) || fire.getBoundingBox().intersect(player2.getBoundingBox())) {
+                if ((fire.getBoundingBox().intersect(player1.getBoundingBox()) || fire.getBoundingBox().intersect(player2.getBoundingBox())) && !is_gameover) {
                     $('#game-over').show();
+                    is_gameover = true;
                 }
             })
             
@@ -190,9 +214,9 @@
             }else{
                 blueDoor.closedEffect();
             } 
-            if (redDoorArrived && blueDoorArrived) {
-                $('#game-start').hide();
+            if (redDoorArrived && blueDoorArrived && !is_gameend) {
                 $('#game-end').show();
+                is_gameend = true;
             }
             
             /* Update the sprites */
@@ -230,10 +254,9 @@
         $("#game-start").on("click", function() {
             /* Hide the start screen */
             $("#game-start").hide();
-            // sounds.background.play();
+            sounds.background.play();
+
             socket.emit("assign player");
-            
-            
             socket.on("receive player", num => {
                 playerNum = num;
                 
@@ -325,13 +348,22 @@
                     })
                 }
 
+                $(".restart-button").on("click", function(event) {
+                    $("#game-over").hide();
+                    $("#game-start").show();
+                })
+        
+                $(".menu-button").on("click", function(event) {
+                    $("#game-over").hide();
+                    $("#game-start").show();
+                })
             });
-        
-        
-            /* Start the game */
-            requestAnimationFrame(doFrame);
+        /* Start the game */
+        requestAnimationFrame(doFrame);
         });
+
     });
+
     </script>
 </body>
 </html>

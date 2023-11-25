@@ -29,7 +29,7 @@ canvas {
 }
 
 #game-start, #game-over, #game-end {
-    background: rgba(1, 1, 1, 0.8);
+    background: rgba(1, 1, 1, 1.0);
 }
 
 #game-over text, #game-end text{
@@ -55,4 +55,14 @@ canvas {
     font-size: 400%;
     fill: url(#title-fill);
     stroke: black;
+}
+
+.restart-button, .menu-button {
+    fill: rgb(155, 155, 155, 0.7);
+    cursor: pointer;
+    font-size: 80%;
+}
+
+.restart-button :hover, .menu-button :hover {
+    fill: rgb(155, 155, 155, 1.0);
 }
