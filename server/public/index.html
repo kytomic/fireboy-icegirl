@@ -10,11 +10,11 @@
     <div id="game-container">
         <canvas width="854px" height="480px"></canvas>
 
-        <!-- <svg xmlns="http://www.w3.org/2000/svg" id="counter">
-            <text x="10" y="35">
-                TIME:<tspan id="time-remaining">20</tspan>
+        <svg xmlns="http://www.w3.org/2000/svg" id="counter">
+            <text x="40%" y="35">
+                TIME:<tspan id="timer">20</tspan>
             </text>
-        </svg> -->
+        </svg>
 
         <svg xmlns="http://www.w3.org/2000/svg" id="game-start">
             <text x="50%" y="60%">Click here to start the game</text>
@@ -72,75 +72,35 @@
             trigger: new Audio("./media/trigger.mp3")
         };
 
-        const totalGameTime = 20;   // Total game time in seconds
-        let gameStartTime = 0;      // The timestamp when the game starts
-        let collectedCoins = 0;      // The number of coins collected in the game
-        let playerNum = null;
-        let player = null;
         Socket.connect();
         let socket = Socket.getSocket();
-        let is_gameover = false;
-        let is_gameend = false;
-        
-        /* Create the game area */
-        // top, left, bottom, right
-        let movingBoxes1 = [
-            BoundingBox(context, 400, 25, 440, 280),
-            BoundingBox(context, 315, 280, 440, 400),
-            BoundingBox(context, 315, 25, 360, 280),
-            BoundingBox(context, 315, 25, 360, 120),
-            BoundingBox(context, 228, 120, 280, 300),
-            BoundingBox(context, 135, 300, 280, 400),
-            BoundingBox(context, 135, 25, 190, 300),
-            BoundingBox(context, 20, 25, 190, 120),
-            BoundingBox(context, 20, 120, 106, 400),
-        ];
-        let movingBoxes2 = [
-            BoundingBox(context, 400, 450, 440, 820),
-            BoundingBox(context, 315, 450, 440, 580),
-            BoundingBox(context, 315, 580, 360, 820),
-            BoundingBox(context, 228, 720, 360, 820),
-            BoundingBox(context, 228, 450, 280, 720),
-            BoundingBox(context, 228, 450, 280, 560),
-            BoundingBox(context, 135, 560, 190, 820),
-            BoundingBox(context, 20, 720, 190, 820),
-            BoundingBox(context, 20, 450, 106, 720),
-        ];
 
-        /* Create the sprites in the game */
-        const player1 = Player(context, 100, 440, movingBoxes1); // The player 1
-        const player2 = Player(context, 700, 440, movingBoxes2); // The player 2
-        const coins = [
-            Coin(context, 150, 430), 
-            Coin(context, 550, 430),
-            Coin(context, 300, 340),
-            Coin(context, 650, 340),
-            Coin(context, 200, 260),
-            Coin(context, 750, 260),
-            Coin(context, 250, 160),
-            Coin(context, 700, 160),
-            Coin(context, 80, 60),
-            Coin(context, 650, 60)];        // The coins
-        const redDoor = Door(context, 340, 68, 'red');
-        const blueDoor = Door(context, 510, 68, 'blue');
-        const redBar = Bar(context, 78, 362, 'red');
-        const blueBar = Bar(context, 500, 272, 'blue');
-        const redSwitch = Switch(context, 770, 373, 'red');
-        const blueSwitch = Switch(context, 370, 290, 'blue');
-        const fires = [
-            Fire(context, 347, 442),
-            Fire(context, 365, 442),
-            Fire(context, 382, 442),
-            Fire(context, 398, 442),
-            Fire(context, 28, 190),
-            Fire(context, 48, 190),
-            Fire(context, 820, 360),
-            Fire(context, 800, 190),
-            Fire(context, 820, 190),
-        ]
-        
+        let gameStartTime = 0;      // The timestamp when the game starts
+
         $('#game-over').hide();
         $('#game-end').hide();
+        $('#counter').hide();
+
+        let collectedCoins = null;      
+        let playerNum = null;
+        let player = null;
+        let is_gameover = false;
+        let is_gameend = null;
+        let cheat_mode = null;
+        let movingBoxes1 = null;
+        let movingBoxes2 = null;       
+
+        /* Create the sprites in the game */
+        let player1 = null; 
+        let player2 = null; 
+        let coins = null;        
+        let redDoor = null;
+        let blueDoor = null;
+        let redBar = null;
+        let blueBar = null;
+        let redSwitch = null;
+        let blueSwitch = null;
+        let fires = null;
 
         /* The main processing of the game */
         function doFrame(now) {
@@ -148,19 +108,8 @@
             
             /* Update the time remaining */
             const gameTimeSoFar = now - gameStartTime;
-            const timeRemaining = Math.ceil((totalGameTime * 1000 - gameTimeSoFar) / 1000);
-            $("#time-remaining").text(timeRemaining);
-            
-            /* Handle the game over situation here */
-
-
-            // Jumping logic
-            if (player != null && player.getJumping() == true) {
-                player.jump(socket, playerNum);
-            }else if (player != null){
-                player.fall(socket, playerNum);
-            }
-
+            const timeRemaining = Math.ceil((gameTimeSoFar) / 1000);
+            $("#timer").text(timeRemaining);
                         
             // Handling bar-switch logic
             if (redSwitch.getTriggerState() == false) {
@@ -194,12 +143,20 @@
             })
 
             // Handling game-over logic
-            fires.forEach(fire => {
-                if ((fire.getBoundingBox().intersect(player1.getBoundingBox()) || fire.getBoundingBox().intersect(player2.getBoundingBox())) && !is_gameover) {
-                    $('#game-over').show();
-                    is_gameover = true;
+            if (!cheat_mode) {
+                fires.forEach(fire => {
+                    if ((fire.getBoundingBox().intersect(player1.getBoundingBox()) || fire.getBoundingBox().intersect(player2.getBoundingBox())) && !is_gameover) {
+                        $('#game-over').show();
+                        is_gameover = true;
+                    }
+                })
+
+                if (player != null && player.getJumping() == true) {
+                    player.jump(socket, playerNum);
+                }else if (player != null){
+                    player.fall(socket, playerNum);
                 }
-            })
+            }
             
             // Handling winning logic
             let redDoorArrived = redDoor.getBoundingBox().intersect(player1.getBoundingBox());
@@ -252,8 +209,79 @@
         
         /* Handle the start of the game */
         $("#game-start").on("click", function() {
+            collectedCoins = 0;      // The number of coins collected in the game
+            playerNum = null;
+            player = null;
+            is_gameover = false;
+            is_gameend = false;
+            cheat_mode = false;
+            
+            /* Create the game area */
+            // top, left, bottom, right
+            movingBoxes1 = [
+                BoundingBox(context, 400, 25, 440, 280),
+                BoundingBox(context, 315, 280, 440, 400),
+                BoundingBox(context, 315, 25, 360, 280),
+                BoundingBox(context, 315, 25, 360, 120),
+                BoundingBox(context, 228, 120, 280, 300),
+                BoundingBox(context, 135, 300, 280, 400),
+                BoundingBox(context, 135, 25, 190, 300),
+                BoundingBox(context, 20, 25, 190, 120),
+                BoundingBox(context, 20, 120, 106, 400),
+            ];
+             movingBoxes2 = [
+                BoundingBox(context, 400, 450, 440, 820),
+                BoundingBox(context, 315, 450, 440, 580),
+                BoundingBox(context, 315, 580, 360, 820),
+                BoundingBox(context, 228, 720, 360, 820),
+                BoundingBox(context, 228, 450, 280, 720),
+                BoundingBox(context, 228, 450, 280, 560),
+                BoundingBox(context, 135, 560, 190, 820),
+                BoundingBox(context, 20, 720, 190, 820),
+                BoundingBox(context, 20, 450, 106, 720),
+            ];
+
+            if (cheat_mode) {
+                movingBoxes1 = [BoundingBox(context, 20, 25, 440, 400)];
+                movingBoxes2 = [BoundingBox(context, 20, 450, 440, 820)];
+            }
+            
+
+            /* Create the sprites in the game */
+            player1 = Player(context, 100, 440, movingBoxes1, 1, cheat_mode); // The player 1
+            player2 = Player(context, 700, 440, movingBoxes2, 2, cheat_mode); // The player 2
+            coins = [
+                Coin(context, 150, 430), 
+                Coin(context, 550, 430),
+                Coin(context, 300, 340),
+                Coin(context, 650, 340),
+                Coin(context, 200, 260),
+                Coin(context, 750, 260),
+                Coin(context, 250, 160),
+                Coin(context, 700, 160),
+                Coin(context, 80, 60),
+                Coin(context, 650, 60)];        // The coins
+            redDoor = Door(context, 340, 68, 'red');
+            blueDoor = Door(context, 510, 68, 'blue');
+            redBar = Bar(context, 78, 362, 'red');
+            blueBar = Bar(context, 500, 272, 'blue');
+            redSwitch = Switch(context, 770, 373, 'red');
+            blueSwitch = Switch(context, 370, 290, 'blue');
+            fires = [
+                Fire(context, 347, 442),
+                Fire(context, 365, 442),
+                Fire(context, 382, 442),
+                Fire(context, 398, 442),
+                Fire(context, 28, 190),
+                Fire(context, 48, 190),
+                Fire(context, 820, 360),
+                Fire(context, 800, 190),
+                Fire(context, 820, 190),
+            ]
+
             /* Hide the start screen */
             $("#game-start").hide();
+            $("#counter").show();
             sounds.background.play();
 
             socket.emit("assign player");
@@ -274,9 +302,13 @@
                     if (event.keyCode == 37) {
                         player.move(1);
                         moveNum = 1
-                    }else if (event.keyCode == 38 && player.getJumping() != true){
+                    }else if (event.keyCode == 38 && cheat_mode) {
+                        player.move(2);
+                        moveNum = 2;
+                    }else if (event.keyCode == 38 && player.getJumping() != true) {
                         player.setJumping(true);
                         moveNum = 2;
+                        return;
                     }else if (event.keyCode == 39){
                         player.move(3);
                         moveNum = 3
@@ -296,6 +328,9 @@
                     if (event.keyCode == 37) {
                         player.stop(1);
                         stopNum = 1;
+                    }else if (event.keyCode == 38 && cheat_mode){
+                        player.stop(2);
+                        stopNum = 2;
                     }else if (event.keyCode == 39){
                         player.stop(3);
                         stopNum = 3;
@@ -311,7 +346,7 @@
                 if (player == player1) {
                     socket.on('move player2', (num) => {
                         num = Number(num);
-                        if (num == 2) {
+                        if (num == 2 && !cheat_mode) {
                             player2.setJumping(true);
                         } else {
                             player2.move(num);
@@ -330,7 +365,7 @@
                 } else if (player == player2) {
                     socket.on('move player1', (num) => {
                         num = Number(num);
-                        if (num == 2) {
+                        if (num == 2 && !cheat_mode) {
                             player1.setJumping(true);
                         } else {
                             player1.move(num);
@@ -360,8 +395,8 @@
                     $("#game-start").show();
                 })
             });
-        /* Start the game */
-        requestAnimationFrame(doFrame);
+            /* Start the game */
+            requestAnimationFrame(doFrame);
         });
 
     });
