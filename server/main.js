@@ -35,13 +35,8 @@ io.on('connection', (socket) => {
         }
     });
 
-    socket.on('player1 move', (num) => {io.emit('move player1', num);})
-    socket.on('player2 move', (num) => {io.emit('move player2', num);})
-    socket.on('player1 stop', (num) => {io.emit('stop player1', num);})
-    socket.on('player2 stop', (num) => {io.emit('stop player2', num);})
-    socket.on('player1 jump', (cor) => {io.emit('jump player1', cor);})
-    socket.on('player2 jump', (cor) => {io.emit('jump player2', cor);})
-    socket.on('player1 fall', (cor) => {io.emit('fall player1', cor);})
-    socket.on('player2 fall', (cor) => {io.emit('fall player2', cor);})
-
+    socket.on('player move', (num) => {socket.broadcast.emit('move player', num);})
+    socket.on('player stop', (num) => {socket.broadcast.emit('stop player', num);})
+    socket.on('player jump', (cor) => {socket.broadcast.emit('jump player', cor);})
+    socket.on('player fall', (cor) => {socket.broadcast.emit('fall player', cor);})
 });

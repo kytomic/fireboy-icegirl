@@ -118,7 +118,7 @@ const Player = function(ctx, x, y, boxes, playerNum, cheat_mode) {
         if (valid_move) {
             sprite.setXY(x, y);
             let coordinates = {x: x, y: y};
-            socket.emit('player' + playerNum.toString() + ' jump', coordinates);
+            socket.emit('player jump', coordinates);
         }
     };
 
@@ -146,7 +146,7 @@ const Player = function(ctx, x, y, boxes, playerNum, cheat_mode) {
         
         sprite.setXY(x, y);
         let coordinates = {x: x, y: y};
-        socket.emit('player' + playerNum.toString() + ' jump', coordinates);
+        socket.emit('player fall', coordinates);
     }
 
 

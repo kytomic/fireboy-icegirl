@@ -216,7 +216,7 @@
             player = null;
             is_gameover = false;
             is_gameend = false;
-            cheat_mode = false;
+            cheat_mode = true;
             
             /* Create the game area */
             // top, left, bottom, right
@@ -338,7 +338,7 @@
                             moveNum = 4;
                         }
                         // Send character movement to server for synchronised animation
-                        socket.emit('player' + playerNum.toString() + ' move', moveNum.toString());
+                        socket.emit('player move', moveNum.toString());
                     });
                     
                     /* Handle the keyup of arrow keys and spacebar */
@@ -360,48 +360,30 @@
                         }
                         
                         // Send character movement to server for synchronised animation
-                        socket.emit('player' + playerNum.toString() + ' stop', stopNum.toString());
+                        socket.emit('player stop', stopNum.toString());
                     });
-    
-                    if (player == player1) {
-                        socket.on('move player2', (num) => {
-                            num = Number(num);
-                            if (num == 2 && !cheat_mode) {
-                                player2.setJumping(true);
-                            } else {
-                                player2.move(num);
-                            }
-                        });
-                        socket.on('stop player2', (num) => {
-                            num = Number(num);
-                            player2.stop(num);
-                        });
-                        socket.on('jump player2', (cor) => {
-                            player2.setXY(cor.x, cor.y)
-                        })
-                        socket.on('fall player2', (cor) => {
-                            player2.setXY(cor.x, cor.y)
-                        })
-                    } else if (player == player2) {
-                        socket.on('move player1', (num) => {
-                            num = Number(num);
-                            if (num == 2 && !cheat_mode) {
-                                player1.setJumping(true);
-                            } else {
-                                player1.move(num);
-                            }
-                        });
-                        socket.on('stop player1', (num) => {
-                            num = Number(num);
-                            player1.stop(num);
-                        });
-                        socket.on('jump player1', (cor) => {
-                            player1.setXY(cor.x, cor.y)
-                        })
-                        socket.on('fall player1', (cor) => {
-                            player1.setXY(cor.x, cor.y)
-                        })
-                    }
+
+                    socket.on('move player', (num) => {
+                        num = Number(num);
+                        if (num != 2 || cheat_mode) {
+                            if (playerNum == '1') player2.move(num);
+                            if (playerNum == '2') player1.move(num);
+                        }
+                    });
+                    socket.on('stop player', (num) => {
+                        num = Number(num);
+                        if (playerNum == '1') player2.stop(num);
+                        if (playerNum == '2') player1.stop(num);
+                    });
+                    socket.on('jump player', (cor) => {
+                        if (playerNum == '1') player2.setXY(cor.x, cor.y);
+                        if (playerNum == '2') player1.setXY(cor.x, cor.y);
+                    })
+                    socket.on('fall player', (cor) => {
+                        if (playerNum == '1') player2.setXY(cor.x, cor.y);
+                        if (playerNum == '2') player1.setXY(cor.x, cor.y);
+                    })
+
                     /* Start the game */
                     requestAnimationFrame(doFrame);
                 });
