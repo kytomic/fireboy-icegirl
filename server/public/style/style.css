@@ -37,7 +37,7 @@ canvas {
   background: rgba(1, 1, 1, 0.8);
 }
 
-#game-over text, #game-end text, #game-waiting text {
+#game-over text, #game-waiting text, #game-end text {
   font-size: 150%;
   text-anchor: middle;
   fill: white;
@@ -68,6 +68,24 @@ canvas {
   font-size: 80%;
 }
 
+.restart-button text, .menu-button text {
+  font-size: 150%;
+  fill: white;
+  text-anchor: middle;
+}
+
 .restart-button :hover, .menu-button :hover {
   fill: rgb(155, 155, 155);
+}
+
+#game-end .scores {
+  font-size: 75%;
+  fill: white;
+  text-anchor: middle;
+}
+
+#game-end #your-score {
+  font-size: 80%;
+  fill: white;
+  text-anchor: middle;
 }/*# sourceMappingURL=style.css.map */

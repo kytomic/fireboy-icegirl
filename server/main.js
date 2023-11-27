@@ -5,6 +5,7 @@ const { createServer } = require("http");
 const { Server } = require("socket.io");
 const httpServer = createServer(app);
 const cors = require('cors');
+const fs = require("fs");
 
 // Middlewares
 app.use(express.static('public'));
@@ -35,8 +36,35 @@ io.on('connection', (socket) => {
         }
     });
 
-    socket.on('player move', (num) => {socket.broadcast.emit('move player', num);})
-    socket.on('player stop', (num) => {socket.broadcast.emit('stop player', num);})
-    socket.on('player jump', (cor) => {socket.broadcast.emit('jump player', cor);})
-    socket.on('player fall', (cor) => {socket.broadcast.emit('fall player', cor);})
+
+    // Handling player movement
+    socket.on('player move', (num) => {socket.broadcast.emit('move player', num);});
+    socket.on('player stop', (num) => {socket.broadcast.emit('stop player', num);});
+    socket.on('player jump', (cor) => {socket.broadcast.emit('jump player', cor);});
+    socket.on('player fall', (cor) => {socket.broadcast.emit('fall player', cor);});
+
+    socket.on('save score', (data) => {
+        let scores = fs.readFileSync('./data/scores.json');
+
+        if (scores.toJSON().data.length > 0) {
+            scores = JSON.parse(fs.readFileSync('./data/scores.json'));
+            if (scores.some(s => s.player1 == data.player1 && s.player2 == data.player2 && s.score == data.score)) {
+                socket.emit('send scores', scores);
+                return;
+            }
+        }else{
+            scores = [];
+        }
+
+        scores.push({player1: data.player1, player2: data.player2, score: data.score});
+    
+        function compareByScore(a, b) {
+            return a.score - b.score;
+        }
+        
+        scores = scores.sort(compareByScore);
+        scores = scores.reverse();
+        fs.writeFileSync('./data/scores.json', JSON.stringify(scores));
+        socket.emit('send scores', scores);
+    })
 });

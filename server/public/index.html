@@ -25,15 +25,21 @@
         </svg>
         
         <svg xmlns="http://www.w3.org/2000/svg" id="game-end">
-            <text x="50%" y="30%">You Win the Game!</text>
+            <text x="50%" y="15%">You Win the Game!</text>
+
+            <text x="50%" y="35%" class="scores" id="score1">Score 1: </text>
+            <text x="50%" y="42%" class="scores" id="score2">Score 2: </text>
+            <text x="50%" y="49%" class="scores" id="score3">Score 3: </text>
+            <text x="50%" y="56%" id="your-score">Score 3: </text>
+
             <g class="restart-button">
-                <rect x="40%" y="55%" rx="5" ry="5" width="20%" height="10%"/>
-                <text x="50%" y="62%">Restart</text>
+                <rect x="40%" y="65%" rx="5" ry="5" width="20%" height="10%"/>
+                <text x="50%" y="72%">Restart</text>
             </g>
 
             <g class="menu-button">
-                <rect x="35%" y="70%" rx="5" ry="5" width="30%" height="10%"/>
-                <text x="50%" y="77%">To Main Menu</text>
+                <rect x="35%" y="80%" rx="5" ry="5" width="30%" height="10%"/>
+                <text x="50%" y="87%">To Main Menu</text>
             </g>
         </svg>
         
@@ -62,6 +68,7 @@
     <script src="scripts/switch.js"></script>
     <script src="scripts/socket.js"></script>
     <script src="scripts/fire.js"></script>
+    <script src="scripts/score.js"></script>
 
     <script>    
     $(document).ready(function() {
@@ -71,7 +78,7 @@
 
         /* Create the sounds */
         const sounds = {
-            background: new Audio("./media/background.mp3"),
+            walk: new Audio("./media/walk.mp3"),
             collect: new Audio("./media/collect.mp3"),
             trigger: new Audio("./media/trigger.mp3")
         };
@@ -105,9 +112,8 @@
             if (gameStartTime == 0) gameStartTime = now;
             
             /* Update the time remaining */
-            const gameTimeSoFar = now - gameStartTime;
-            const timeRemaining = Math.ceil((gameTimeSoFar) / 1000);
-            $("#timer").text(timeRemaining);
+            let gameTimeSoFar = Math.ceil((now - gameStartTime) / 1000);
+            $("#timer").text(gameTimeSoFar);
                         
             // Handling bar-switch logic
             if (redSwitch.getTriggerState() == false) {
@@ -174,9 +180,36 @@
                 blueDoor.closedEffect();
             } 
             if (redDoorArrived && blueDoorArrived && !is_gameend) {
-                $('#game-end').show();
                 is_gameend = true;
-                return;
+                let score = Score(player1.getCollectedCoin(), player2.getCollectedCoin(), gameTimeSoFar);
+
+                let playerName1 = 'player1', playerName2 = 'player2';
+
+                socket.emit('save score', {player1: playerName1, playerName1: playerName2, score: score});
+                socket.on('send scores', (scores) => {
+                    let is_score_in_rank = false;
+                    let yourRank = -1;
+                    $('#your-score').hide(); 
+                    for (let i = 0; i < scores.length; i++) {
+                        let rank = i + 1;
+                        if (i < 3 && scores[i].player1 == 'player1' && scores[i].player2 == 'player2' && scores[i].score == score) {
+                            $('#score' + rank.toString()).text('Rank ' + rank + ': ' + 'Player 1: ' + playerName1 + ', Player 2: ' + playerName2 + ', Your Score: ' + score);
+                            is_score_in_rank = true;
+                        }else if (i < 3){
+                            $('#score' + rank.toString()).text('Rank ' + rank + ': ' + 'Player 1: ' + scores[i].player1 + ', Player 2: ' + scores[i].player2 + ', Score: ' + scores[i].score);
+                        }else if (scores[i].player1 == 'player1' && scores[i].player2 == 'player2' && scores[i].score == score) {
+                            yourRank = rank;
+                        }
+                    }
+                    
+                    if (!is_score_in_rank) {
+                        $('#your-score').show(); 
+                        $('#your-score').text('Rank ' + yourRank + ': ' + 'Player 1: ' + playerName1 + ', Player 2: ' + playerName2 + ', Your Score: ' + score);
+                    }
+
+                    $('#game-end').show();
+                    return;
+                })
             }
             
             /* Update the sprites */
@@ -216,7 +249,9 @@
             player = null;
             is_gameover = false;
             is_gameend = false;
-            cheat_mode = true;
+
+            // Cheat Mode Configuration
+            cheat_mode = false;
             
             /* Create the game area */
             // top, left, bottom, right
@@ -283,7 +318,6 @@
             /* Hide the start screen */
             $("#game-start").hide();
             $("#game-waiting").show();
-            sounds.background.play();
             
             if (playerNum == '1') {
                 console.log('Being player 1');
@@ -338,6 +372,7 @@
                             moveNum = 4;
                         }
                         // Send character movement to server for synchronised animation
+                        sounds.walk.play();
                         socket.emit('player move', moveNum.toString());
                     });
                     
@@ -368,6 +403,7 @@
                         if (num != 2 || cheat_mode) {
                             if (playerNum == '1') player2.move(num);
                             if (playerNum == '2') player1.move(num);
+                            sounds.walk.play();
                         }
                     });
                     socket.on('stop player', (num) => {
