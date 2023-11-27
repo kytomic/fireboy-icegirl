@@ -11,7 +11,7 @@ body {
     position: relative;
 }
 
-canvas, #counter, #game-start, #game-over, #game-end {
+canvas, #counter, #game-start, #game-over, #game-end, #game-waiting {
     position: absolute;
     top: 0;
     left: 0;
@@ -33,11 +33,11 @@ canvas {
     background-size: cover;
 }
 
-#game-over, #game-end {
+#game-over, #game-end, #game-waiting {
     background: rgba(1, 1, 1, 0.8);
 }
 
-#game-over text, #game-end text{
+#game-over text, #game-end text, #game-waiting text{
     font-size: 150%;
     text-anchor: middle;
     fill: white;

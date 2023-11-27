@@ -170,9 +170,6 @@ const Player = function(ctx, x, y, boxes, playerNum, cheat_mode) {
                 }
             });
             
-            console.log('Speed: ', speed / 60);
-            console.log('valid_move: ', valid_move);
-
             /* Set the new position if it is within the game area */
             if (valid_move)
                 sprite.setXY(x, y);
