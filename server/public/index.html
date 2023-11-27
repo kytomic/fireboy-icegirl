@@ -81,7 +81,6 @@
         $('#game-end').hide();
         $('#counter').hide();
 
-        let collectedCoins = null;      
         let playerNum = null;
         let player = null;
         let is_gameover = false;
@@ -132,12 +131,10 @@
                 if (coin.getBoundingBox().intersect(player1.getBoundingBox())) {
                     sounds.collect.play();
                     player1.coinIncrement();
-                    // console.log('player1 Score: ', player1.getCollectedCoin())
                     coin.hide();
                 }else if (coin.getBoundingBox().intersect(player2.getBoundingBox())) {
                     sounds.collect.play();
                     player2.coinIncrement();
-                    // console.log('player2 Score: ', player2.getCollectedCoin())
                     coin.hide();
                 }
             })
@@ -209,12 +206,12 @@
         
         /* Handle the start of the game */
         $("#game-start").on("click", function() {
-            collectedCoins = 0;      // The number of coins collected in the game
             playerNum = null;
             player = null;
             is_gameover = false;
             is_gameend = false;
             cheat_mode = false;
+            gameStartTime = 0;
             
             /* Create the game area */
             // top, left, bottom, right
@@ -229,7 +226,7 @@
                 BoundingBox(context, 20, 25, 190, 120),
                 BoundingBox(context, 20, 120, 106, 400),
             ];
-             movingBoxes2 = [
+            movingBoxes2 = [
                 BoundingBox(context, 400, 450, 440, 820),
                 BoundingBox(context, 315, 450, 440, 580),
                 BoundingBox(context, 315, 580, 360, 820),
@@ -245,7 +242,6 @@
                 movingBoxes1 = [BoundingBox(context, 20, 25, 440, 400)];
                 movingBoxes2 = [BoundingBox(context, 20, 450, 440, 820)];
             }
-            
 
             /* Create the sprites in the game */
             player1 = Player(context, 100, 440, movingBoxes1, 1, cheat_mode); // The player 1
@@ -383,18 +379,20 @@
                     })
                 }
 
-                $(".restart-button").on("click", function(event) {
-                    $("#game-over").hide();
-                    $("#game-end").hide();
-                    $("#game-start").show();
-                })
-        
-                $(".menu-button").on("click", function(event) {
-                    $("#game-over").hide();
-                    $("#game-end").hide();
-                    $("#game-start").show();
-                })
             });
+
+            $(".restart-button").on("click", function(event) {
+                $("#game-over").hide();
+                $("#game-end").hide();
+                $("#game-start").show();
+            });
+    
+            $(".menu-button").on("click", function(event) {
+                $("#game-over").hide();
+                $("#game-end").hide();
+                $("#game-start").show();
+            });
+
             /* Start the game */
             requestAnimationFrame(doFrame);
         });

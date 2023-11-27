@@ -11,15 +11,11 @@ const Player = function(ctx, x, y, boxes, playerNum, cheat_mode) {
     const sequences = {
         /* Idling sprite sequences for facing different directions */
         idleLeft:  { x: 0, y: 26, width: 17, height: 26, count: 1, timing: 2000, loop: false },
-        // idleUp:    { x: 0, y: 50, width: 24, height: 25, count: 1, timing: 2000, loop: false },
         idleRight: { x: 0, y: 0, width: 17, height: 26, count: 1, timing: 2000, loop: false },
-        // idleDown:  { x: 0, y:  0, width: 24, height: 25, count: 3, timing: 2000, loop: false },
 
         /* Moving sprite sequences for facing different directions */
         moveLeft:  { x: 0, y: 26, width: 17, height: 26, count: 2, timing: 50, loop: true },
-        // moveUp:    { x: 0, y: 150, width: 24, height: 25, count: 10, timing: 50, loop: true },
         moveRight: { x: 0, y: 0, width: 17, height: 26, count: 2, timing: 50, loop: true },
-        // moveDown:  { x: 0, y: 100, width: 24, height: 25, count: 10, timing: 50, loop: true }
     };
 
     // This is the sprite object of the player created from the Sprite module.
@@ -57,9 +53,7 @@ const Player = function(ctx, x, y, boxes, playerNum, cheat_mode) {
         if (dir >= 1 && dir <= 4 && dir != direction) {
             switch (dir) {
                 case 1: sprite.setSequence(sequences.moveLeft); break;
-                // case 2: sprite.setSequence(sequences.moveUp); break;
                 case 3: sprite.setSequence(sequences.moveRight); break;
-                // case 4: sprite.setSequence(sequences.moveDown); break;
             }
             direction = dir;
         }
@@ -71,9 +65,7 @@ const Player = function(ctx, x, y, boxes, playerNum, cheat_mode) {
         if (direction == dir) {
             switch (dir) {
                 case 1: sprite.setSequence(sequences.idleLeft); break;
-                // case 2: sprite.setSequence(sequences.idleUp); break;
                 case 3: sprite.setSequence(sequences.idleRight); break;
-                // case 4: sprite.setSequence(sequences.idleDown); break;
             }
             direction = 0;
         }
