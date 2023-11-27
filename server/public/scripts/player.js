@@ -170,6 +170,9 @@ const Player = function(ctx, x, y, boxes, playerNum, cheat_mode) {
                 }
             });
             
+            console.log('Speed: ', speed / 60);
+            console.log('valid_move: ', valid_move);
+
             /* Set the new position if it is within the game area */
             if (valid_move)
                 sprite.setXY(x, y);
@@ -188,6 +191,11 @@ const Player = function(ctx, x, y, boxes, playerNum, cheat_mode) {
         return collected_coin;
     }
 
+    const getSpeed = function() {
+        console.log('Speed: ', speed);
+        return speed;
+    }
+
     return {
         move: move,
         stop: stop,
@@ -202,6 +210,7 @@ const Player = function(ctx, x, y, boxes, playerNum, cheat_mode) {
         coinIncrement: coinIncrement,
         getXY: sprite.getXY,
         setXY: sprite.setXY,
-        getCollectedCoin: getCollectedCoin
+        getCollectedCoin: getCollectedCoin,
+        getSpeed: getSpeed
     };
 };
