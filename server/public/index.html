@@ -81,7 +81,8 @@
         const sounds = {
             walk: new Audio("./media/walk.mp3"),
             collect: new Audio("./media/collect.mp3"),
-            trigger: new Audio("./media/trigger.mp3")
+            trigger: new Audio("./media/trigger.mp3"),
+            background: new Audio("./media/background.mp3")
         };
 
         Socket.connect();
@@ -258,8 +259,7 @@
             is_gameover = false;
             is_gameend = false;
 
-            // Cheat Mode Configuration
-            cheat_mode = true;
+            sounds.background.play();
             
             /* Create the game area */
             // top, left, bottom, right
@@ -437,6 +437,7 @@
         });
         
         $(".restart-button").on("click", function(event) {
+            sounds.background.pause();
             $("#game-over").hide();
             $("#game-end").hide();
             $("#game-start").show();
