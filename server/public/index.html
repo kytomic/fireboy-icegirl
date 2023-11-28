@@ -42,6 +42,7 @@
             required
           />
           <button type="submit" class="submit-btn">Login</button>
+          <div id="login-message" class="warning"></div>
         </form>
 
         <form id="register-form" class="input-group">
@@ -201,10 +202,41 @@
     <script src="scripts/score.js"></script>
     <script src="scripts/menu.js"></script>
     <script src="scripts/registration.js"></script>
+    <script src="scripts/authentication.js"></script>
 
     <script>
       $(document).ready(function () {
         //$("#background-authentication").hide();
+
+        // Submit event for the signin form
+        $("#login-form").on("submit", (e) => {
+          // Do not submit the form
+          e.preventDefault();
+
+          // Get the input fields
+          const username = $("#login-username").val().trim();
+          const password = $("#login-password").val().trim();
+
+          // Send a signin request
+          Authentication.signin(
+            username,
+            password,
+            () => {
+              $("#background-authentication").hide();
+              //   hide();
+              //   UserPanel.update(Authentication.getUser());
+              //   UserPanel.show();
+
+              //   Socket.connect();
+              console.log("login success: " + username + " " + password);
+            },
+            (error) => {
+              $("#login-message").text(error);
+            }
+          );
+        });
+
+        // Submit event for the register form
         $("#register-form").on("submit", (e) => {
           // Do not submit the form
           e.preventDefault();

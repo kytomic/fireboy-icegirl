@@ -88,6 +88,39 @@ app.post("/register", (req, res) => {
   res.json({ status: "success" });
 });
 
+// Handle the /signin endpoint
+app.post("/signin", (req, res) => {
+  // Get the JSON data from the body
+  const { username, password } = req.body;
+
+  //
+  // D. Reading the users.json file
+  //
+  const users = JSON.parse(fs.readFileSync("data/users.json"));
+
+  //
+  // E. Checking for username/password
+  //
+  if (username in users === false) {
+    res.json({ status: "error", error: "User does not exist." });
+    return;
+  }
+  const hashedPassword = users[username].password;
+
+  if (!bcrypt.compareSync(password, hashedPassword)) {
+    res.json({ status: "error", error: "Incorrect password." });
+    return;
+  }
+
+  //
+  // G. Sending a success response with the user account
+  //
+  //   const avatar = users[username].avatar;
+  //   const name = users[username].name;
+  //   req.session.user = { username, avatar, name };
+  res.json({ status: "success", user: { username } });
+});
+
 io.on("connection", (socket) => {
   socket.on("assign player", () => {
     are_players_ready[playerIndex] = true;
