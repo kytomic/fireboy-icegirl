@@ -1,8 +1,8 @@
 const Score = function(coin1, coin2, time) {
-    const timeConstant = 300;
-    const scoreConstant = 300;
+    const timeConstant = 30;
+    const scoreConstant = 10;
 
     let totalScore = (coin1 + coin2 + scoreConstant) * (timeConstant / (timeConstant + time));
 
-    return Math.floor(totalScore);
+    return Math.floor(totalScore) * 100;
 }

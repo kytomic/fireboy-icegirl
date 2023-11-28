@@ -42,7 +42,7 @@ const Player = function(ctx, x, y, boxes, playerNum, cheat_mode) {
     let direction = 0;
 
     // This is the moving speed (pixels per second) of the player
-    let speed = 75;
+    let speed = 90;
     if (cheat_mode) {
         speed = 125;
     }

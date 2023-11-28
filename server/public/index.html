@@ -24,23 +24,24 @@
             <text x="50%" y="60%">Waiting Another Player...</text>
         </svg>
         
+        <!-- Changed -->
         <svg xmlns="http://www.w3.org/2000/svg" id="game-end">
             <text x="50%" y="15%">You Win the Game!</text>
 
-            <text x="50%" y="35%" class="scores" id="score1">Score 1: </text>
-            <text x="50%" y="42%" class="scores" id="score2">Score 2: </text>
-            <text x="50%" y="49%" class="scores" id="score3">Score 3: </text>
-            <text x="50%" y="56%" id="your-score">Score 3: </text>
+            <text x="15%" y="30%" class="scores" id="score1">Rank 1:  No Existed Yet</text>
+            <text x="15%" y="37%" class="scores" id="score2">Rank 2:  No Existed Yet</text>
+            <text x="15%" y="44%" class="scores" id="score3">Rank 3:  No Existed Yet</text>
+            <text x="15%" y="55%" id="your-score">Your Score:  </text>
 
             <g class="restart-button">
                 <rect x="40%" y="65%" rx="5" ry="5" width="20%" height="10%"/>
                 <text x="50%" y="72%">Restart</text>
             </g>
 
-            <g class="menu-button">
+            <!-- <g class="menu-button">
                 <rect x="35%" y="80%" rx="5" ry="5" width="30%" height="10%"/>
                 <text x="50%" y="87%">To Main Menu</text>
-            </g>
+            </g> -->
         </svg>
         
         <svg xmlns="http://www.w3.org/2000/svg" id="game-over">        
@@ -50,10 +51,10 @@
                 <text x="50%" y="62%">Restart</text>
             </g>
 
-            <g class="menu-button">
+            <!-- <g class="menu-button">
                 <rect x="35%" y="70%" rx="5" ry="5" width="30%" height="10%"/>
                 <text x="50%" y="77%">To Main Menu</text>
-            </g>
+            </g> -->
         </svg>
     </div>
 
@@ -155,10 +156,6 @@
                     }
                 })
 
-                if (is_gameover) {
-                    return;
-                }
-
                 if (player != null && player.getJumping() == true) {
                     player.jump(socket, playerNum);
                 }else if (player != null){
@@ -183,33 +180,34 @@
                 is_gameend = true;
                 let score = Score(player1.getCollectedCoin(), player2.getCollectedCoin(), gameTimeSoFar);
 
-                let playerName1 = 'player1', playerName2 = 'player2';
+                let playerName1 = 'Ken', playerName2 = 'John';
 
-                socket.emit('save score', {player1: playerName1, playerName1: playerName2, score: score});
+                socket.emit('save score', {player1: playerName1, player2: playerName2, score: score});
                 socket.on('send scores', (scores) => {
                     let is_score_in_rank = false;
                     let yourRank = -1;
                     $('#your-score').hide(); 
                     for (let i = 0; i < scores.length; i++) {
                         let rank = i + 1;
-                        if (i < 3 && scores[i].player1 == 'player1' && scores[i].player2 == 'player2' && scores[i].score == score) {
-                            $('#score' + rank.toString()).text('Rank ' + rank + ': ' + 'Player 1: ' + playerName1 + ', Player 2: ' + playerName2 + ', Your Score: ' + score);
+                        // changed 3
+                        if (i < 3 && scores[i].player1 == playerName1 && scores[i].player2 == playerName2 && scores[i].score == score) {
+                            $('#score' + rank.toString()).text('Rank ' + rank + ':  ' + 'Player 1: ' + playerName1 + ', Player 2: ' + playerName2 + ', Your Score: ' + score);
                             is_score_in_rank = true;
                         }else if (i < 3){
-                            $('#score' + rank.toString()).text('Rank ' + rank + ': ' + 'Player 1: ' + scores[i].player1 + ', Player 2: ' + scores[i].player2 + ', Score: ' + scores[i].score);
-                        }else if (scores[i].player1 == 'player1' && scores[i].player2 == 'player2' && scores[i].score == score) {
+                            $('#score' + rank.toString()).text('Rank ' + rank + ':  ' + 'Player 1: ' + scores[i].player1 + ', Player 2: ' + scores[i].player2 + ', Score: ' + scores[i].score);
+                        }else if (scores[i].player1 == playerName1 && scores[i].player2 == playerName2 && scores[i].score == score) {
                             yourRank = rank;
                         }
                     }
                     
                     if (!is_score_in_rank) {
                         $('#your-score').show(); 
-                        $('#your-score').text('Rank ' + yourRank + ': ' + 'Player 1: ' + playerName1 + ', Player 2: ' + playerName2 + ', Your Score: ' + score);
+                        $('#your-score').text('Rank ' + yourRank + ':  ' + 'Player 1: ' + playerName1 + ', Player 2: ' + playerName2 + ', Your Score: ' + score);
                     }
 
                     $('#game-end').show();
-                    return;
                 })
+                return;
             }
             
             /* Update the sprites */
@@ -237,9 +235,15 @@
             
             player1.draw();
             player2.draw();
+
+            // changed 2
+            if (is_gameover || is_gameend) {
+                return;
+            }else{
+                // /* Process the next frame */
+                requestAnimationFrame(doFrame);
+            }
             
-            // /* Process the next frame */
-            requestAnimationFrame(doFrame);
         }
         
         
@@ -251,7 +255,7 @@
             is_gameend = false;
 
             // Cheat Mode Configuration
-            cheat_mode = false;
+            cheat_mode = true;
             
             /* Create the game area */
             // top, left, bottom, right
@@ -346,7 +350,8 @@
                         console.log('player ready');
                         is_ready = true;
                         $("#game-waiting").hide();
-                        $("#counter").hide();
+                        // Changed 4
+                        $("#counter").show();
                         gameStartTime = 0;
                     });
 
@@ -433,11 +438,11 @@
             $("#game-start").show();
         });
 
-        $(".menu-button").on("click", function(event) {
-            $("#game-over").hide();
-            $("#game-end").hide();
-            $("#game-start").show();
-        });
+        // $(".menu-button").on("click", function(event) {
+        //     $("#game-over").hide();
+        //     $("#game-end").hide();
+        //     $("#game-start").show();
+        // });
 
     });
 
