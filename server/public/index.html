@@ -14,7 +14,9 @@
       <div class="main">
         <h1 class="menu-title">Fireboy and Icegirl: Remastered</h1>
         <a href="#" class="menu-button" onclick="Menu.toggleAbout()">About</a>
-        <a href="#" class="menu-button" onclick="toggleCreate()">Create Room</a>
+        <a href="#" class="menu-button" onclick="Menu.toggleCreate()"
+          >Create Room</a
+        >
         <a href="#" class="menu-button" onclick="toggleJoin()">Join Game</a>
         <a href="#" class="menu-button">Log Out</a>
       </div>
@@ -34,6 +36,21 @@
           pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
           culpa qui officia deserunt mollit anim id est laborum.
         </p>
+      </div>
+    </div>
+
+    <div class="popup" id="popup-create">
+      <div class="overlay"></div>
+      <div class="content">
+        <div class="close-btn" onclick="Menu.toggleCreate()">&times;</div>
+        <h1>Create Room</h1>
+        <button onclick="Menu.createRoom()" id="create-room-btn">
+          Click to Create Room
+        </button>
+        <div id="room-num"><h2 id="room-num-text">Room Number</h2></div>
+
+        <h3 id="create-player1">player 1</h3>
+        <h3 id="create-player2">player 2</h3>
       </div>
     </div>
 

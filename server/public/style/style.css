@@ -105,6 +105,12 @@ body {
   transform: translate(-50%, -50%) scale(1);
 }
 
+#popup-create #room-num,
+#create-player1,
+#create-player2 {
+  display: none;
+}
+
 canvas,
 #counter,
 #game-start,
