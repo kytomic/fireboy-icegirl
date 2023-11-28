@@ -30,36 +30,58 @@ const Menu = (function () {
     document.getElementById("popup-about").classList.toggle("active");
   }
 
-  function toggleCreate() {
-    document.getElementById("popup-create").classList.toggle("active");
-  }
+  // function toggleCreate() {
+  //   document.getElementById("popup-create").classList.toggle("active");
+  // }
 
   function toggleJoin() {
     document.getElementById("popup-join").classList.toggle("active");
   }
 
-  function createRoom() {
-    var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    var roomNumber = "";
-    for (var i = 5; i > 0; --i)
-      roomNumber += chars[Math.round(Math.random() * (chars.length - 1))];
-    console.log(roomNumber);
+  // function createRoom() {
+  //   var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  //   var roomNumber = "";
+  //   for (var i = 5; i > 0; --i)
+  //     roomNumber += chars[Math.round(Math.random() * (chars.length - 1))];
+  //   console.log(roomNumber);
 
-    var createBtn = document.getElementById("create-room-btn");
-    createBtn.style.display = "none";
+  //   var createBtn = document.getElementById("create-room-btn");
+  //   createBtn.style.display = "none";
 
-    var roomNum = document.getElementById("room-num");
-    roomNum.style.display = "block";
+  //   var roomNum = document.getElementById("room-num");
+  //   roomNum.style.display = "block";
 
-    var roomNumText = document.getElementById("room-num-text");
-    roomNumText.innerHTML = "Room Number: " + roomNumber;
+  //   var roomNumText = document.getElementById("room-num-text");
+  //   roomNumText.innerHTML = "Room Number: " + roomNumber;
 
-    var player1 = document.getElementById("create-player1");
-    var player2 = document.getElementById("create-player2");
+  //   var fireboySelect = document.getElementById("create-fireboy");
+  //   fireboySelect.style.display = "block";
+  //   var icegirlSelect = document.getElementById("create-icegirl");
+  //   icegirlSelect.style.display = "block";
 
-    player1.style.display = "block";
-    player2.style.display = "block";
-  }
+  //   // player1.style.display = "block";
+  //   // player2.style.display = "block";
+  // }
+
+  // function selectFireboy() {
+  //   var player1 = document.getElementById("create-player1");
+
+  //   const currentUser = Authentication.getUser();
+  //   console.log("current user: " + currentUser.username);
+
+  //   player1.style.display = "block";
+  //   player1.innerHTML = currentUser.username;
+  // }
+
+  // function selectIcegirl() {
+  //   var player2 = document.getElementById("create-player2");
+
+  //   const currentUser = Authentication.getUser();
+  //   console.log("current user: " + currentUser.username);
+
+  //   player2.style.display = "block";
+  //   player2.innerHTML = currentUser.username;
+  // }
 
   function logOut() {
     Authentication.signout(() => {
@@ -70,10 +92,19 @@ const Menu = (function () {
     });
   }
 
+  // return {
+  //   toggleAbout,
+  //   toggleCreate,
+  //   createRoom,
+  //   toggleJoin,
+  //   toggleRegistration,
+  //   toggleLogin,
+  //   selectFireboy,
+  //   selectIcegirl,
+  //   logOut,
+  // };
   return {
     toggleAbout,
-    toggleCreate,
-    createRoom,
     toggleJoin,
     toggleRegistration,
     toggleLogin,

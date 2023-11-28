@@ -76,13 +76,14 @@
     <div id="background-main">
       <div class="main">
         <h1 class="menu-title">Fireboy and Icegirl: Remastered</h1>
-        <a href="#" class="menu-button" onclick="Menu.toggleAbout()">About</a>
-        <a href="#" class="menu-button" onclick="Menu.toggleCreate()"
-          >Create Room</a
-        >
+        <!-- <a href="#" class="menu-button" onclick="Menu.toggleCreate()"
+          >New Game</a
+        > -->
         <a href="#" class="menu-button" onclick="Menu.toggleJoin()"
-          >Join Game</a
+          >Find Game</a
         >
+        <a href="#" class="menu-button" onclick="Menu.toggleAbout()">About</a>
+
         <a href="#" class="menu-button" onclick="Menu.logOut()">Log Out</a>
       </div>
     </div>
@@ -104,34 +105,105 @@
       </div>
     </div>
 
-    <div class="popup" id="popup-create">
+    <!-- <div class="popup" id="popup-create">
       <div class="overlay"></div>
       <div class="content">
         <div class="close-btn" onclick="Menu.toggleCreate()">&times;</div>
-        <h1>Create Room</h1>
+        <h1>New Game</h1>
         <button onclick="Menu.createRoom()" id="create-room-btn">
           Click to Create Room
         </button>
         <div id="room-num"><h2 id="room-num-text">Room Number</h2></div>
 
-        <h3 id="create-player1">player 1</h3>
-        <h3 id="create-player2">player 2</h3>
+        <div class="row">
+          <div class="column">
+            <a
+              href="#"
+              class="fireboy-select"
+              id="create-fireboy"
+              onclick="Menu.selectFireboy()"
+              ><img src="media/fireboy_select.png" style="width: 100%"
+            /></a>
+          </div>
+          <div class="column">
+            <a
+              href="#"
+              class="icegirl-select"
+              id="create-icegirl"
+              onclick="Menu.selectIcegirl()"
+              ><img src="media/icegirl_select.png" style="width: 100%"
+            /></a>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="column">
+            <h3 id="create-player1">player 1</h3>
+          </div>
+          <div class="column">
+            <h3 id="create-player2">player 2</h3>
+          </div>
+        </div>
       </div>
-    </div>
+    </div> -->
 
     <div class="popup" id="popup-join">
       <div class="overlay"></div>
       <div class="content">
         <div class="close-btn" onclick="Menu.toggleJoin()">&times;</div>
-        <h1>Join Game</h1>
+        <h1>Find Game</h1>
         <form id="join-form">
           <input
             id="join-room-num"
             type="text"
             class="input-field"
-            placeholder="Room Number"
+            placeholder="Pass Code"
             required
           />
+          <!-- <div class="row">
+            <div class="column">
+              <a
+                href="#"
+                class="fireboy-select"
+                id="create-fireboy"
+                onclick="Menu.selectFireboy()"
+                ><img src="media/fireboy_select.png" style="width: 100%"
+              /></a>
+            </div>
+            <div class="column">
+              <a
+                href="#"
+                class="icegirl-select"
+                id="create-icegirl"
+                onclick="Menu.selectIcegirl()"
+                ><img src="media/icegirl_select.png" style="width: 100%"
+              /></a>
+            </div>
+          </div> -->
+          <!-- <div class="fireboy-select" id="create-fireboy">
+            <img src="media/fireboy_select.png" style="width: 100%" />
+          </div> -->
+          <input
+            type="checkbox"
+            id="character1"
+            name="character1"
+            value="Fireboy"
+          />
+          <label for="vehicle1"> Fireboy</label><br />
+          <input
+            type="checkbox"
+            id="character2"
+            name="character2"
+            value="Icegirl"
+          />
+          <label for="vehicle2"> Icegirl</label><br />
+          <input
+            type="checkbox"
+            id="cheatmode-option"
+            name="cheatmode-option"
+            value="cheatmode"
+          />
+          <label for="cheatmode-option"> Cheat Mode</label><br /><br />
           <button type="submit" class="submit-btn">Join</button>
         </form>
       </div>
@@ -214,7 +286,7 @@
             // UserPanel.show();
 
             Socket.connect();
-            console.log("login success: " + username);
+            console.log("login success: " + socket.request.session.user);
           },
           () => {
             $("#background-authentication").show();
