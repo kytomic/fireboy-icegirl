@@ -156,6 +156,17 @@ app.get("/validate", (req, res) => {
   //res.json({ status: "error", error: "This endpoint is not yet implemented." });
 });
 
+app.get("/signout", (req, res) => {
+  //
+  // Deleting req.session.user
+  //
+  req.session.destroy();
+  //
+  // Sending a success response
+  //
+  res.json({ status: "success" });
+});
+
 io.on("connection", (socket) => {
   socket.on("assign player", () => {
     are_players_ready[playerIndex] = true;

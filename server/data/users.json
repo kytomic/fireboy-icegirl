@@ -1,8 +1,11 @@
 {
-  "tony": {
-    "password": "$2b$10$Yxb2fSgA5RFn9Oz9TxjLLuve/GiPXCs2DWVFhyFDr4qz39qglwp8e"
-  },
-  "ming": {
-    "password": "$2b$10$dD5w4nfORmN/d9XYWEd5zucU1MdLuDLkj1t5g.q8em4YCEM89TGdy"
-  }
+ "tony": {
+  "password": "$2b$10$Yxb2fSgA5RFn9Oz9TxjLLuve/GiPXCs2DWVFhyFDr4qz39qglwp8e"
+ },
+ "ming": {
+  "password": "$2b$10$dD5w4nfORmN/d9XYWEd5zucU1MdLuDLkj1t5g.q8em4YCEM89TGdy"
+ },
+ "miki": {
+  "password": "$2b$10$xRCDvb8vKlJ.jvlZtcbGWuQqRUUW9N7kmCjosfWj4nhHGt225GD8C"
+ }
 }

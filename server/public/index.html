@@ -83,7 +83,7 @@
         <a href="#" class="menu-button" onclick="Menu.toggleJoin()"
           >Join Game</a
         >
-        <a href="#" class="menu-button">Log Out</a>
+        <a href="#" class="menu-button" onclick="Menu.logOut()">Log Out</a>
       </div>
     </div>
 
@@ -206,7 +206,7 @@
 
     <script>
       $(document).ready(function () {
-        //$("#background-authentication").hide();
+        $("#background-authentication").hide();
         Authentication.validate(
           () => {
             $("#background-authentication").hide();

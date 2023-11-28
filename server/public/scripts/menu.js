@@ -61,6 +61,15 @@ const Menu = (function () {
     player2.style.display = "block";
   }
 
+  function logOut() {
+    Authentication.signout(() => {
+      Socket.disconnect();
+
+      $("#background-authentication").show();
+      // SignInForm.show();
+    });
+  }
+
   return {
     toggleAbout,
     toggleCreate,
@@ -68,5 +77,6 @@ const Menu = (function () {
     toggleJoin,
     toggleRegistration,
     toggleLogin,
+    logOut,
   };
 })();
