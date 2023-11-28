@@ -11,7 +11,7 @@ body {
   position: relative;
 }
 
-canvas, #counter, #game-start, #game-over, #game-end {
+canvas, #counter, #game-start, #game-over, #game-end, #game-waiting {
   position: absolute;
   top: 0;
   left: 0;
@@ -28,11 +28,16 @@ canvas {
   background-size: cover;
 }
 
-#game-start, #game-over, #game-end {
+#game-start {
+  background: url(../media/background.jpg);
+  background-size: cover;
+}
+
+#game-over, #game-end, #game-waiting {
   background: rgba(1, 1, 1, 0.8);
 }
 
-#game-over text, #game-end text {
+#game-over text, #game-waiting text, #game-end text {
   font-size: 150%;
   text-anchor: middle;
   fill: white;
@@ -55,4 +60,32 @@ canvas {
   font-size: 400%;
   fill: url(#title-fill);
   stroke: black;
+}
+
+.restart-button, .menu-button {
+  fill: rgba(155, 155, 155, 0.7);
+  cursor: pointer;
+  font-size: 80%;
+}
+
+.restart-button text, .menu-button text {
+  font-size: 150%;
+  fill: white;
+  text-anchor: middle;
+}
+
+.restart-button :hover, .menu-button :hover {
+  fill: rgb(155, 155, 155);
+}
+
+#game-end .scores {
+  font-size: 75%;
+  fill: white;
+  text-anchor: middle;
+}
+
+#game-end #your-score {
+  font-size: 80%;
+  fill: white;
+  text-anchor: middle;
 }/*# sourceMappingURL=style.css.map */
