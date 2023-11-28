@@ -99,12 +99,18 @@ body {
   border-radius: 30px;
 }
 
-#login {
+#login-form {
   left: 50px;
 }
 
-#register {
+#register-form {
   left: 450px;
+}
+
+.warning {
+  font-family: sans-serif;
+  text-align: center;
+  color: #45a049;
 }
 
 #background-main {

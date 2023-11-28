@@ -26,7 +26,7 @@
           </button>
         </div>
 
-        <form id="login" class="input-group">
+        <form id="login-form" class="input-group">
           <input
             id="login-username"
             type="text"
@@ -36,7 +36,7 @@
           />
           <input
             id="login-password"
-            type="text"
+            type="password"
             class="input-field"
             placeholder="Password"
             required
@@ -44,7 +44,7 @@
           <button type="submit" class="submit-btn">Login</button>
         </form>
 
-        <form id="register" class="input-group">
+        <form id="register-form" class="input-group">
           <input
             id="register-username"
             type="text"
@@ -54,19 +54,20 @@
           />
           <input
             id="register-password"
-            type="text"
+            type="password"
             class="input-field"
             placeholder="Password"
             required
           />
           <input
-            id="register-password-2"
-            type="text"
+            id="register-confirm"
+            type="password"
             class="input-field"
             placeholder="Enter Password Again"
             required
           />
           <button type="submit" class="submit-btn">Register</button>
+          <div id="register-message" class="warning"></div>
         </form>
       </div>
     </div>
@@ -199,9 +200,40 @@
     <script src="scripts/fire.js"></script>
     <script src="scripts/score.js"></script>
     <script src="scripts/menu.js"></script>
+    <script src="scripts/registration.js"></script>
 
     <script>
       $(document).ready(function () {
+        //$("#background-authentication").hide();
+        $("#register-form").on("submit", (e) => {
+          // Do not submit the form
+          e.preventDefault();
+
+          // Get the input fields
+          const username = $("#register-username").val().trim();
+          const password = $("#register-password").val().trim();
+          const confirmPassword = $("#register-confirm").val().trim();
+
+          // Password and confirmation does not match
+          if (password != confirmPassword) {
+            $("#register-message").text("Passwords do not match.");
+            return;
+          }
+
+          // Send a register request
+          Registration.register(
+            username,
+            password,
+            () => {
+              $("#register-form").get(0).reset();
+              $("#register-message").text("You can sign in now.");
+            },
+            (error) => {
+              $("#register-message").text(error);
+            }
+          );
+        });
+
         $("#game-container").hide();
         /* Get the canvas and 2D context */
         const cv = $("canvas").get(0);

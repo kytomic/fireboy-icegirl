@@ -10,8 +10,8 @@ const Menu = (function () {
   //     }
   // };
 
-  var loginForm = document.getElementById("login");
-  var registerForm = document.getElementById("register");
+  var loginForm = document.getElementById("login-form");
+  var registerForm = document.getElementById("register-form");
   var toggleBotton = document.getElementById("btn");
 
   function toggleRegistration() {
