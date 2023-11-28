@@ -92,7 +92,7 @@ app.post("/register", (req, res) => {
   //
   const hash = bcrypt.hashSync(password, 10);
   users[username] = { password: hash };
-  console.log(users);
+  // console.log(users);
 
   //
   // H. Saving the users.json file
@@ -167,69 +167,87 @@ app.get("/signout", (req, res) => {
   res.json({ status: "success" });
 });
 
+let roomNum = [];
+let counter = 0;
+let playerNames = [];
+
 io.on("connection", (socket) => {
-  socket.on("assign player", () => {
-    are_players_ready[playerIndex] = true;
-    playerIndex++;
-    if (playerIndex >= 2) {
-      playerIndex = 0;
+  socket.on('send roomNum', (num) => {
+    let state = 'disapproved';
+    if (roomNum.length > 0) {
+      roomNum.forEach(n => {
+        if (num == roomNum) {
+          state = 'approved';
+          let index = roomNum.indexOf(roomNum);
+          roomNum.splice(index, 1);
+        }
+      })
+    }else{
+      roomNum.push(num);
+      state = 'approved';
+      counter++;
     }
-    socket.emit("receive player", (playerIndex + 1).toString());
+    socket.emit('pair up', state);
+  });
 
+  socket.on('assign player', (playerNum) => {
+    playerNum = Number(playerNum);
+    playerNum -= 1;
+    are_players_ready[playerNum] = true;
+    socket.emit('receive player', (playerNum + 1).toString());
+    
     if (are_players_ready[0] == true && are_players_ready[1] == true) {
-      io.emit("player ready");
-      are_players_ready[0] = false;
-      are_players_ready[1] = false;
+        io.emit('player ready');
+        are_players_ready[0] = false;
+        are_players_ready[1] = false;
     }
   });
 
+  // socket.on('assign player', () => {
+  //   are_players_ready[playerIndex] = true;
+  //   playerIndex++;
+  //   if (playerIndex >= 2) {
+  //       playerIndex = 0;
+  //   }
+  //   socket.emit('receive player', (playerIndex + 1).toString());
+    
+  //   if (are_players_ready[0] == true && are_players_ready[1] == true) {
+  //       io.emit('player ready');
+  //       are_players_ready[0] = false;
+  //       are_players_ready[1] = false;
+  //   }
+  // });
+  
+  
+  socket.on('send playerName', (name) => {socket.broadcast.emit('receive playerName', name);});
   // Handling player movement
-  socket.on("player move", (num) => {
-    socket.broadcast.emit("move player", num);
-  });
-  socket.on("player stop", (num) => {
-    socket.broadcast.emit("stop player", num);
-  });
-  socket.on("player jump", (cor) => {
-    socket.broadcast.emit("jump player", cor);
-  });
-  socket.on("player fall", (cor) => {
-    socket.broadcast.emit("fall player", cor);
-  });
+  socket.on('player move', (num) => {socket.broadcast.emit('move player', num);});
+  socket.on('player stop', (num) => {socket.broadcast.emit('stop player', num);});
+  socket.on('player jump', (cor) => {socket.broadcast.emit('jump player', cor);});
+  socket.on('player fall', (cor) => {socket.broadcast.emit('fall player', cor);});
 
-  socket.on("save score", (data) => {
-    let scores = fs.readFileSync("./data/scores.json");
+  socket.on('save score', (data) => {
+    let scores = fs.readFileSync('./data/scores.json');
 
     if (scores.toJSON().data.length > 0) {
-      scores = JSON.parse(fs.readFileSync("./data/scores.json"));
-      if (
-        scores.some(
-          (s) =>
-            s.player1 == data.player1 &&
-            s.player2 == data.player2 &&
-            s.score == data.score
-        )
-      ) {
-        socket.emit("send scores", scores);
-        return;
-      }
-    } else {
-      scores = [];
+        scores = JSON.parse(fs.readFileSync('./data/scores.json'));
+        if (scores.some(s => s.player1 == data.player1 && s.player2 == data.player2 && s.score == data.score)) {
+            socket.emit('send scores', scores);
+            return;
+        }
+    }else{
+        scores = [];
     }
 
-    scores.push({
-      player1: data.player1,
-      player2: data.player2,
-      score: data.score,
-    });
+    scores.push({player1: data.player1, player2: data.player2, score: data.score});
 
     function compareByScore(a, b) {
-      return a.score - b.score;
+        return a.score - b.score;
     }
-
+    
     scores = scores.sort(compareByScore);
     scores = scores.reverse();
-    fs.writeFileSync("./data/scores.json", JSON.stringify(scores));
-    socket.emit("send scores", scores);
-  });
+    fs.writeFileSync('./data/scores.json', JSON.stringify(scores));
+    socket.emit('send scores', scores);
+  })
 });

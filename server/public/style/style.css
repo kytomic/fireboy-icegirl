@@ -43,7 +43,7 @@ body {
   width: 220px;
   margin: 35px auto;
   position: relative;
-  box-shadow: 0 0 20px 9px #48ff241f;
+  box-shadow: 0 0 20px 9px rgba(72, 255, 36, 0.1215686275);
   border-radius: 30px;
 }
 
@@ -206,53 +206,10 @@ body {
   transition: all 300ms ease-in-out;
   transform: translate(-50%, -50%) scale(1);
 }
-/* 
-#popup-create #room-num,
-#create-player1,
-#create-player2,
-#create-fireboy,
-#create-icegirl {
-  display: none;
-}
-
-#popup-create .content {
-  height: 550px;
-} */
 
 #popup-join .content {
   height: 300px;
 }
-/* 
-.column {
-  float: left;
-  width: 50%;
-  padding: 5px;
-}
-
-.row {
-  display: flex;
-  align-items: center;
-}
-
-.column {
-  flex: 50%;
-  padding: 5px;
-}
-
-.fireboy-select {
-  display: flex;
-  float: left;
-  padding-left: 5px;
-  padding-right: 5px;
-  padding-bottom: 5px;
-}
-.icegirl-select {
-  display: flex;
-  float: left;
-  padding-left: 5px;
-  padding-right: 5px;
-  padding-bottom: 5px;
-} */
 
 canvas,
 #counter,
@@ -336,13 +293,13 @@ canvas {
 }
 
 #game-end .scores {
-  font-size: 75%;
+  font-size: 60%;
   fill: white;
-  text-anchor: middle;
+  text-anchor: start;
 }
 
 #game-end #your-score {
-  font-size: 80%;
+  font-size: 75%;
   fill: white;
-  text-anchor: middle;
-} /*# sourceMappingURL=style.css.map */
+  text-anchor: start;
+}/*# sourceMappingURL=style.css.map */

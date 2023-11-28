@@ -82,7 +82,7 @@
         <a href="#" class="menu-button" onclick="Menu.toggleJoin()"
           >Find Game</a
         >
-        <a href="#" class="menu-button" onclick="Menu.toggleAbout()">About</a>
+        <a href="#" class="menu-button" onclick="Menu.toggleAbout()">About & Instruction</a>
 
         <a href="#" class="menu-button" onclick="Menu.logOut()">Log Out</a>
       </div>
@@ -93,59 +93,16 @@
       <div class="content">
         <div class="close-btn" onclick="Menu.toggleAbout()">&times;</div>
         <h1>About</h1>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
+        <p style="text-align: left;">
+          Two players collaborate to escape the temple by solving puzzles, 
+          inspired by a childhood browser game “Fireboy and Watergirl 1: Forest Temple”.<br/><br/>
+          Player Control: key up, left, down for jumping, moving left and right.<br/><br/>
+          Win Condition: Both players successfully open the exit door and leave the temple.<br/><br/>
+          Lose Condition: One of the players are burned.<br/><br/>
+          Scores are computed by collected coins and finishing time.<br/><br/>
         </p>
       </div>
     </div>
-
-    <!-- <div class="popup" id="popup-create">
-      <div class="overlay"></div>
-      <div class="content">
-        <div class="close-btn" onclick="Menu.toggleCreate()">&times;</div>
-        <h1>New Game</h1>
-        <button onclick="Menu.createRoom()" id="create-room-btn">
-          Click to Create Room
-        </button>
-        <div id="room-num"><h2 id="room-num-text">Room Number</h2></div>
-
-        <div class="row">
-          <div class="column">
-            <a
-              href="#"
-              class="fireboy-select"
-              id="create-fireboy"
-              onclick="Menu.selectFireboy()"
-              ><img src="media/fireboy_select.png" style="width: 100%"
-            /></a>
-          </div>
-          <div class="column">
-            <a
-              href="#"
-              class="icegirl-select"
-              id="create-icegirl"
-              onclick="Menu.selectIcegirl()"
-              ><img src="media/icegirl_select.png" style="width: 100%"
-            /></a>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="column">
-            <h3 id="create-player1">player 1</h3>
-          </div>
-          <div class="column">
-            <h3 id="create-player2">player 2</h3>
-          </div>
-        </div>
-      </div>
-    </div> -->
 
     <div class="popup" id="popup-join">
       <div class="overlay"></div>
@@ -160,51 +117,31 @@
             placeholder="Pass Code"
             required
           />
-          <!-- <div class="row">
-            <div class="column">
-              <a
-                href="#"
-                class="fireboy-select"
-                id="create-fireboy"
-                onclick="Menu.selectFireboy()"
-                ><img src="media/fireboy_select.png" style="width: 100%"
-              /></a>
-            </div>
-            <div class="column">
-              <a
-                href="#"
-                class="icegirl-select"
-                id="create-icegirl"
-                onclick="Menu.selectIcegirl()"
-                ><img src="media/icegirl_select.png" style="width: 100%"
-              /></a>
-            </div>
-          </div> -->
-          <!-- <div class="fireboy-select" id="create-fireboy">
-            <img src="media/fireboy_select.png" style="width: 100%" />
-          </div> -->
+
           <input
             type="checkbox"
             id="character1"
             name="character1"
-            value="Fireboy"
           />
-          <label for="vehicle1"> Fireboy</label><br />
+
+          <label> Fireboy</label><br />
+
           <input
             type="checkbox"
             id="character2"
             name="character2"
-            value="Icegirl"
           />
-          <label for="vehicle2"> Icegirl</label><br />
+          <label> Icegirl</label><br />
+
           <input
             type="checkbox"
             id="cheatmode-option"
             name="cheatmode-option"
-            value="cheatmode"
+
           />
-          <label for="cheatmode-option"> Cheat Mode</label><br /><br />
+          <label> Cheat Mode</label><br /><br />
           <button type="submit" class="submit-btn">Join</button>
+          <label id="join-form-error-input"></label><br /><br />
         </form>
       </div>
     </div>
@@ -214,7 +151,7 @@
 
       <svg xmlns="http://www.w3.org/2000/svg" id="counter">
         <text x="40%" y="35">
-          TIME:
+          TIME: 
           <tspan id="timer">20</tspan>
         </text>
       </svg>
@@ -224,39 +161,28 @@
       </svg>
 
       <svg xmlns="http://www.w3.org/2000/svg" id="game-waiting">
-        <text x="50%" y="60%">Waiting Another Player...</text>
+        <text id="waiting-text" x="50%" y="60%">Waiting Another Player...</text>
       </svg>
-
       <svg xmlns="http://www.w3.org/2000/svg" id="game-end">
         <text x="50%" y="15%">You Win the Game!</text>
 
-        <text x="50%" y="35%" class="scores" id="score1">Score 1:</text>
-        <text x="50%" y="42%" class="scores" id="score2">Score 2:</text>
-        <text x="50%" y="49%" class="scores" id="score3">Score 3:</text>
-        <text x="50%" y="56%" id="your-score">Score 3:</text>
+        <text x="15%" y="30%" class="scores" id="score1">Rank 1:  No Existed Yet</text>
+        <text x="15%" y="37%" class="scores" id="score2">Rank 2:  No Existed Yet</text>
+        <text x="15%" y="44%" class="scores" id="score3">Rank 3:  No Existed Yet</text>
+        <text x="15%" y="55%" id="your-score">Your Score:  </text>
 
         <g class="restart-button">
-          <rect x="40%" y="65%" rx="5" ry="5" width="20%" height="10%" />
-          <text x="50%" y="72%">Restart</text>
-        </g>
-
-        <g class="menu-button">
-          <rect x="35%" y="80%" rx="5" ry="5" width="30%" height="10%" />
-          <text x="50%" y="87%">To Main Menu</text>
+            <rect x="40%" y="65%" rx="5" ry="5" width="20%" height="10%"/>
+            <text x="50%" y="72%">Restart</text>
         </g>
       </svg>
-
-      <svg xmlns="http://www.w3.org/2000/svg" id="game-over">
-        <text x="50%" y="30%">You Lose the Game!</text>
-        <g class="restart-button">
-          <rect x="40%" y="55%" rx="5" ry="5" width="20%" height="10%" />
-          <text x="50%" y="62%">Restart</text>
-        </g>
-
-        <g class="menu-button">
-          <rect x="35%" y="70%" rx="5" ry="5" width="30%" height="10%" />
-          <text x="50%" y="77%">To Main Menu</text>
-        </g>
+    
+      <svg xmlns="http://www.w3.org/2000/svg" id="game-over">        
+          <text x="50%" y="30%">You Lose the Game!</text>
+          <g class="restart-button">
+              <rect x="40%" y="55%" rx="5" ry="5" width="20%" height="10%"/>
+              <text x="50%" y="62%">Restart</text>
+          </g>
       </svg>
     </div>
 
@@ -278,7 +204,15 @@
 
     <script>
       $(document).ready(function () {
+        $("#game-container").hide();
         $("#background-authentication").hide();
+
+        let playerNum = null, player = null;
+        let cheat_mode = false;
+
+        let socket = null;
+        let playerName = null, anotherPlayerName = null;
+
         Authentication.validate(
           () => {
             $("#background-authentication").hide();
@@ -286,12 +220,15 @@
             // UserPanel.show();
 
             Socket.connect();
-            console.log("login success: " + socket.request.session.user);
+            socket = Socket.getSocket();
+            socket.on('receive playerName', (name) => {anotherPlayerName = name; console.log('anotherPlayerName ', anotherPlayerName)});
+            // console.log("login success: " + socket.request.session.user);
           },
           () => {
             $("#background-authentication").show();
           }
         );
+
         // Submit event for the signin form
         $("#login-form").on("submit", (e) => {
           // Do not submit the form
@@ -300,6 +237,8 @@
           // Get the input fields
           const username = $("#login-username").val().trim();
           const password = $("#login-password").val().trim();
+          playerName = username;
+          localStorage.setItem('username', playerName);
 
           // Send a signin request
           Authentication.signin(
@@ -312,7 +251,9 @@
               //   UserPanel.show();
 
               Socket.connect();
-              console.log("login success: " + username);
+              socket = Socket.getSocket();
+              socket.on('receive playerName', (name) => {anotherPlayerName = name; console.log('anotherPlayerName ', anotherPlayerName)});
+              // console.log("login success: " + username);
             },
             (error) => {
               $("#login-message").text(error);
@@ -329,6 +270,8 @@
           const username = $("#register-username").val().trim();
           const password = $("#register-password").val().trim();
           const confirmPassword = $("#register-confirm").val().trim();
+
+          playerName = username;
 
           // Password and confirmation does not match
           if (password != confirmPassword) {
@@ -350,7 +293,59 @@
           );
         });
 
-        $("#game-container").hide();
+        // Submit event for the register form
+        let is_form_submit_before = false; 
+        $("#join-form").on("submit", (e) => {
+          // Do not submit the form
+          e.preventDefault();
+
+          let roomNum = $("#join-room-num").val().trim();
+          if (playerName == null && localStorage.getItem('username') != null) {
+            playerName = localStorage.getItem('username');
+            console.log('playername ', playerName);
+          }
+
+          // Get the input fields
+          if ($("#character1").is(':checked')) {
+            playerNum = '1'; 
+          }
+
+          if ($("#character2").is(':checked')) {
+            playerNum = '2'; 
+          }
+
+          if ($("#cheatmode-option").is(':checked')) {
+            cheat_mode = true;
+          }else{
+            cheat_mode = false;
+          }
+
+          if ($("#character1").is(':checked') && $("#character2").is(':checked')) {
+            $('#join-form-error-input').text('You cannot pick two characters simultaneously.');
+            return;
+          }
+
+          // console.log('roomNum ', roomNum);
+          if ($("#character1").is(':checked') == true || $("#character2").is(':checked') == true) {
+            socket.emit('send roomNum', roomNum);
+            if (is_form_submit_before == false) {
+              socket.on('pair up', (is_approved) => {
+                is_form_submit_before = true;
+                if (is_approved == 'approved') {
+                  socket.emit('send playerName', playerName);
+                  $("#popup-join").hide();
+                  $("#background-main").hide();
+                  $("#game-container").show();
+                } else {
+                  $('#join-form-error-input').text('Room does not exist...');
+                }
+              })
+            }
+          }else{
+            $('#join-form-error-input').text('You have to pick at least one character.');
+          }
+        });
+
         /* Get the canvas and 2D context */
         const cv = $("canvas").get(0);
         const context = cv.getContext("2d");
@@ -360,10 +355,9 @@
           walk: new Audio("./media/walk.mp3"),
           collect: new Audio("./media/collect.mp3"),
           trigger: new Audio("./media/trigger.mp3"),
+          background: new Audio("./media/background.mp3")
         };
 
-        Socket.connect();
-        let socket = Socket.getSocket();
 
         let gameStartTime = 0; // The timestamp when the game starts
 
@@ -372,25 +366,15 @@
         $("#game-waiting").hide();
         $("#counter").hide();
 
-        let playerNum = null,
-          player = null;
-        let is_gameover = false,
-          is_gameend = null;
-        let cheat_mode = null;
-        let movingBoxes1 = null,
-          movingBoxes2 = null;
+        let is_gameover = false, is_gameend = null;
+        let movingBoxes1 = null, movingBoxes2 = null;
 
         /* Create the sprites in the game */
-        let player1 = null,
-          player2 = null;
-        let coins = null,
-          fires = null;
-        let redDoor = null,
-          blueDoor = null;
-        let redBar = null,
-          blueBar = null;
-        let redSwitch = null,
-          blueSwitch = null;
+        let player1 = null, player2 = null;
+        let coins = null, fires = null;
+        let redDoor = null, blueDoor = null;
+        let redBar = null, blueBar = null;
+        let redSwitch = null, blueSwitch = null;
 
         let assigned_player = false;
 
@@ -400,7 +384,10 @@
 
           /* Update the time remaining */
           let gameTimeSoFar = Math.ceil((now - gameStartTime) / 1000);
-          $("#timer").text(gameTimeSoFar);
+          let minutes = (Math.floor(gameTimeSoFar / 60)).toString();
+          let seconds = gameTimeSoFar % 60;
+          seconds = (seconds < 10) ? '0' + seconds.toString(): seconds.toString();
+          $("#timer").text(minutes.toString() + ':' + seconds);
 
           // Handling bar-switch logic
           if (redSwitch.getTriggerState() == false) {
@@ -436,11 +423,7 @@
           // Handling game-over logic
           if (!cheat_mode) {
             fires.forEach((fire) => {
-              if (
-                (fire.getBoundingBox().intersect(player1.getBoundingBox()) ||
-                  fire.getBoundingBox().intersect(player2.getBoundingBox())) &&
-                !is_gameover
-              ) {
+              if ((fire.getBoundingBox().intersect(player1.getBoundingBox()) || fire.getBoundingBox().intersect(player2.getBoundingBox())) && !is_gameover) {
                 $(document).off("keydown");
                 $("#game-over").show();
                 is_gameover = true;
@@ -460,17 +443,14 @@
           }
 
           // Handling winning logic
-          let redDoorArrived = redDoor
-            .getBoundingBox()
-            .intersect(player1.getBoundingBox());
-          let blueDoorArrived = blueDoor
-            .getBoundingBox()
-            .intersect(player2.getBoundingBox());
+          let redDoorArrived = redDoor.getBoundingBox().intersect(player1.getBoundingBox());
+          let blueDoorArrived = blueDoor.getBoundingBox().intersect(player2.getBoundingBox());
           if (redDoorArrived) {
             redDoor.arrivedEffect();
           } else {
             redDoor.closedEffect();
           }
+
           if (blueDoorArrived) {
             blueDoor.arrivedEffect();
           } else {
@@ -478,83 +458,41 @@
           }
           if (redDoorArrived && blueDoorArrived && !is_gameend) {
             is_gameend = true;
-            let score = Score(
-              player1.getCollectedCoin(),
-              player2.getCollectedCoin(),
-              gameTimeSoFar
-            );
+            let score = Score(player1.getCollectedCoin(), player2.getCollectedCoin(), gameTimeSoFar);
 
-            let playerName1 = "player1",
-              playerName2 = "player2";
+            if (playerNum == '1') {
+              playerName1 = playerName;
+              playerName2 = anotherPlayerName;
+            }else if (playerNum == '2') {
+              playerName1 = anotherPlayerName;
+              playerName2 = playerName;
+            }
 
-            socket.emit("save score", {
-              player1: playerName1,
-              playerName1: playerName2,
-              score: score,
-            });
-            socket.on("send scores", (scores) => {
-              let is_score_in_rank = false;
-              let yourRank = -1;
-              $("#your-score").hide();
-              for (let i = 0; i < scores.length; i++) {
-                let rank = i + 1;
-                if (
-                  i < 3 &&
-                  scores[i].player1 == "player1" &&
-                  scores[i].player2 == "player2" &&
-                  scores[i].score == score
-                ) {
-                  $("#score" + rank.toString()).text(
-                    "Rank " +
-                      rank +
-                      ": " +
-                      "Player 1: " +
-                      playerName1 +
-                      ", Player 2: " +
-                      playerName2 +
-                      ", Your Score: " +
-                      score
-                  );
-                  is_score_in_rank = true;
-                } else if (i < 3) {
-                  $("#score" + rank.toString()).text(
-                    "Rank " +
-                      rank +
-                      ": " +
-                      "Player 1: " +
-                      scores[i].player1 +
-                      ", Player 2: " +
-                      scores[i].player2 +
-                      ", Score: " +
-                      scores[i].score
-                  );
-                } else if (
-                  scores[i].player1 == "player1" &&
-                  scores[i].player2 == "player2" &&
-                  scores[i].score == score
-                ) {
-                  yourRank = rank;
+            socket.emit('save score', {player1: playerName1, player2: playerName2, score: score});
+            socket.on('send scores', (scores) => {
+                let is_score_in_rank = false;
+                let yourRank = -1;
+                $('#your-score').hide(); 
+                for (let i = 0; i < scores.length; i++) {
+                    let rank = i + 1;
+                    if (i < 3 && scores[i].player1 == playerName1 && scores[i].player2 == playerName2 && scores[i].score == score) {
+                        $('#score' + rank.toString()).text('Rank ' + rank + ':  ' + 'Player 1: ' + playerName1 + ', Player 2: ' + playerName2 + ', Your Score: ' + score);
+                        is_score_in_rank = true;
+                    }else if (i < 3){
+                        $('#score' + rank.toString()).text('Rank ' + rank + ':  ' + 'Player 1: ' + scores[i].player1 + ', Player 2: ' + scores[i].player2 + ', Score: ' + scores[i].score);
+                    }else if (scores[i].player1 == playerName1 && scores[i].player2 == playerName2 && scores[i].score == score) {
+                        yourRank = rank;
+                    }
                 }
-              }
+                
+                if (!is_score_in_rank) {
+                    $('#your-score').show(); 
+                    $('#your-score').text('Rank ' + yourRank + ':  ' + 'Player 1: ' + playerName1 + ', Player 2: ' + playerName2 + ', Your Score: ' + score);
+                }
 
-              if (!is_score_in_rank) {
-                $("#your-score").show();
-                $("#your-score").text(
-                  "Rank " +
-                    yourRank +
-                    ": " +
-                    "Player 1: " +
-                    playerName1 +
-                    ", Player 2: " +
-                    playerName2 +
-                    ", Your Score: " +
-                    score
-                );
-              }
-
-              $("#game-end").show();
-              return;
-            });
+                $('#game-end').show();
+            })
+            return;
           }
 
           /* Update the sprites */
@@ -583,8 +521,12 @@
           player1.draw();
           player2.draw();
 
-          // /* Process the next frame */
-          requestAnimationFrame(doFrame);
+          if (is_gameover || is_gameend) {
+            return;
+          }else{
+            // /* Process the next frame */
+            requestAnimationFrame(doFrame);
+          }
         }
 
         /* Handle the start of the game */
@@ -594,8 +536,7 @@
           is_gameover = false;
           is_gameend = false;
 
-          // Cheat Mode Configuration
-          cheat_mode = false;
+          sounds.background.play();
 
           /* Create the game area */
           // top, left, bottom, right
@@ -662,38 +603,31 @@
 
           /* Hide the start screen */
           $("#game-start").hide();
-          $("#game-waiting").show();
-
+          
           if (playerNum == "1") {
             console.log("Being player 1");
+            $("#waiting-text").text('Waiting for Icegirl...');
             player = player1;
           } else if (playerNum == "2") {
             console.log("Being player 2");
             player = player2;
+            $("#waiting-text").text('Waiting for Fireboy...');
           }
-
+          $("#game-waiting").show();
+          
           let is_ready = false;
-          socket.emit("assign player");
+          socket.emit("assign player", playerNum);
           if (!assigned_player) {
             socket.on("receive player", (num) => {
               if (!assigned_player) {
-                playerNum = num;
-                if (playerNum == "1") {
-                  console.log("Being player 1");
-                  player = player1;
-                } else if (playerNum == "2") {
-                  console.log("Being player 2");
-                  player = player2;
-                }
+                socket.on('player ready', () => {
+                  console.log('player ready');
+                  is_ready = true;
+                  $("#game-waiting").hide();
+                  $("#counter").show();
+                  gameStartTime = 0;
+                });
               }
-
-              socket.on("player ready", () => {
-                console.log("player ready");
-                is_ready = true;
-                $("#game-waiting").hide();
-                $("#counter").hide();
-                gameStartTime = 0;
-              });
 
               let moveNum = 0;
               assigned_player = true;
@@ -775,17 +709,13 @@
           }
         });
 
-        $(".restart-button").on("click", function (event) {
+        $(".restart-button").on("click", function(event) {
+          sounds.background.pause();
           $("#game-over").hide();
           $("#game-end").hide();
           $("#game-start").show();
         });
 
-        $(".menu-button").on("click", function (event) {
-          $("#game-over").hide();
-          $("#game-end").hide();
-          $("#game-start").show();
-        });
       });
     </script>
   </body>
