@@ -17,7 +17,9 @@
         <a href="#" class="menu-button" onclick="Menu.toggleCreate()"
           >Create Room</a
         >
-        <a href="#" class="menu-button" onclick="toggleJoin()">Join Game</a>
+        <a href="#" class="menu-button" onclick="Menu.toggleJoin()"
+          >Join Game</a
+        >
         <a href="#" class="menu-button">Log Out</a>
       </div>
     </div>
@@ -51,6 +53,24 @@
 
         <h3 id="create-player1">player 1</h3>
         <h3 id="create-player2">player 2</h3>
+      </div>
+    </div>
+
+    <div class="popup" id="popup-join">
+      <div class="overlay"></div>
+      <div class="content">
+        <div class="close-btn" onclick="Menu.toggleJoin()">&times;</div>
+        <h1>Join Game</h1>
+        <form id="join-form">
+          <input
+            id="join-room-num"
+            type="text"
+            class="input-field"
+            placeholder="Room Number"
+            required
+          />
+          <button type="submit" class="submit-btn">Join</button>
+        </form>
       </div>
     </div>
 

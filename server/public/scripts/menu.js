@@ -17,6 +17,10 @@ const Menu = (function () {
     document.getElementById("popup-create").classList.toggle("active");
   }
 
+  function toggleJoin() {
+    document.getElementById("popup-join").classList.toggle("active");
+  }
+
   function createRoom() {
     var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     var roomNumber = "";
@@ -40,5 +44,5 @@ const Menu = (function () {
     player2.style.display = "block";
   }
 
-  return { toggleAbout, toggleCreate, createRoom };
+  return { toggleAbout, toggleCreate, createRoom, toggleJoin };
 })();
