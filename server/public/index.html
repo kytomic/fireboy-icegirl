@@ -207,7 +207,19 @@
     <script>
       $(document).ready(function () {
         //$("#background-authentication").hide();
+        Authentication.validate(
+          () => {
+            $("#background-authentication").hide();
+            // UserPanel.update(Authentication.getUser());
+            // UserPanel.show();
 
+            Socket.connect();
+            console.log("login success: " + username);
+          },
+          () => {
+            $("#background-authentication").show();
+          }
+        );
         // Submit event for the signin form
         $("#login-form").on("submit", (e) => {
           // Do not submit the form
@@ -227,8 +239,8 @@
               //   UserPanel.update(Authentication.getUser());
               //   UserPanel.show();
 
-              //   Socket.connect();
-              console.log("login success: " + username + " " + password);
+              Socket.connect();
+              console.log("login success: " + username);
             },
             (error) => {
               $("#login-message").text(error);

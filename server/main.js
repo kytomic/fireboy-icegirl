@@ -6,6 +6,7 @@ const { Server } = require("socket.io");
 const httpServer = createServer(app);
 const cors = require("cors");
 const fs = require("fs");
+const session = require("express-session");
 
 const bcrypt = require("bcrypt");
 
@@ -16,6 +17,22 @@ app.use(express.json());
 const io = new Server(httpServer);
 let playerIndex = 0;
 let are_players_ready = [false, false];
+
+// Use the session middleware to maintain sessions
+const gameSession = session({
+  secret: "game",
+  resave: false,
+  saveUninitialized: false,
+  rolling: true,
+  cookie: { maxAge: 300000 },
+});
+app.use(gameSession);
+
+io.use((socket, next) => {
+  gameSession(socket.request, {}, next);
+});
+
+//socket.request.session.user
 
 // Http server connection
 httpServer.listen(8000, () => {
@@ -117,8 +134,26 @@ app.post("/signin", (req, res) => {
   //
   //   const avatar = users[username].avatar;
   //   const name = users[username].name;
-  //   req.session.user = { username, avatar, name };
+  req.session.user = { username };
   res.json({ status: "success", user: { username } });
+});
+
+// Handle the /validate endpoint
+app.get("/validate", (req, res) => {
+  //
+  // B. Getting req.session.user
+  //
+  if (!req.session.user) {
+    res.json({ status: "error", error: "Session does not exist." });
+    return;
+  }
+  //
+  // D. Sending a success response with the user account
+  //
+  res.json({ status: "success", user: req.session.user });
+
+  // Delete when appropriate
+  //res.json({ status: "error", error: "This endpoint is not yet implemented." });
 });
 
 io.on("connection", (socket) => {
