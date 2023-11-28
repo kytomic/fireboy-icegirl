@@ -12,7 +12,7 @@
 
         <svg xmlns="http://www.w3.org/2000/svg" id="counter">
             <text x="40%" y="35">
-                TIME:<tspan id="timer">20</tspan>
+                TIME: <tspan id="timer">20</tspan>
             </text>
         </svg>
 
@@ -112,9 +112,13 @@
         function doFrame(now) {
             if (gameStartTime == 0) gameStartTime = now;
             
+            // changed
             /* Update the time remaining */
             let gameTimeSoFar = Math.ceil((now - gameStartTime) / 1000);
-            $("#timer").text(gameTimeSoFar);
+            let minutes = (Math.floor(gameTimeSoFar / 60)).toString();
+            let seconds = gameTimeSoFar % 60;
+            seconds = (seconds < 10) ? '0' + seconds.toString(): seconds.toString();
+            $("#timer").text(minutes.toString() + ':' + seconds);
                         
             // Handling bar-switch logic
             if (redSwitch.getTriggerState() == false) {
