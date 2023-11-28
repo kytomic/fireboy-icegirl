@@ -10,6 +10,67 @@
     <link rel="shortcut icon" href="#" />
   </head>
   <body>
+    <div id="background-authentication">
+      <div id="authentication-form" class="form-box">
+        <div class="button-box">
+          <div id="btn"></div>
+          <button type="button" class="toggle-btn" onclick="Menu.toggleLogin()">
+            Login
+          </button>
+          <button
+            type="button"
+            class="toggle-btn"
+            onclick="Menu.toggleRegistration()"
+          >
+            Register
+          </button>
+        </div>
+
+        <form id="login" class="input-group">
+          <input
+            id="login-username"
+            type="text"
+            class="input-field"
+            placeholder="User Name"
+            required
+          />
+          <input
+            id="login-password"
+            type="text"
+            class="input-field"
+            placeholder="Password"
+            required
+          />
+          <button type="submit" class="submit-btn">Login</button>
+        </form>
+
+        <form id="register" class="input-group">
+          <input
+            id="register-username"
+            type="text"
+            class="input-field"
+            placeholder="User Name"
+            required
+          />
+          <input
+            id="register-password"
+            type="text"
+            class="input-field"
+            placeholder="Password"
+            required
+          />
+          <input
+            id="register-password-2"
+            type="text"
+            class="input-field"
+            placeholder="Enter Password Again"
+            required
+          />
+          <button type="submit" class="submit-btn">Register</button>
+        </form>
+      </div>
+    </div>
+
     <div id="background-main">
       <div class="main">
         <h1 class="menu-title">Fireboy and Icegirl: Remastered</h1>
