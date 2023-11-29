@@ -1,0 +1,35 @@
+{
+ "tony": {
+  "password": "$2b$10$Yxb2fSgA5RFn9Oz9TxjLLuve/GiPXCs2DWVFhyFDr4qz39qglwp8e"
+ },
+ "ming": {
+  "password": "$2b$10$dD5w4nfORmN/d9XYWEd5zucU1MdLuDLkj1t5g.q8em4YCEM89TGdy"
+ },
+ "miki": {
+  "password": "$2b$10$xRCDvb8vKlJ.jvlZtcbGWuQqRUUW9N7kmCjosfWj4nhHGt225GD8C"
+ },
+ "temp": {
+  "password": "$2b$10$mk1JcMTOwlC7WzWECE4dO.Ey2x5FWsxoA5RiGE0w94MH4eOCakDam"
+ },
+ "temp1": {
+  "password": "$2b$10$XGnAmt9wMr.F0qS4gk3xBedxJoByF9ybdkOTPhWqkD.qYNH/.Zmh."
+ },
+ "ken": {
+  "password": "$2b$10$J.Dgg4Tmr1136LMjHK09ZesM9DTX7.C2himxRaRlugRX0xFzbwDUS"
+ },
+ "johnny": {
+  "password": "$2b$10$u4bDahkkFQJ.5AiuzHvQAOHzH8eiMm2pzLIaUCI2552PrUdxDjfPK"
+ },
+ "samm": {
+  "password": "$2b$10$5lWwACBwJcjpHdw1rfdZweGduzXu5x5CT.eo1weTM3I3sBawidPPu"
+ },
+ "john": {
+  "password": "$2b$10$tkgebvcSU/PEJvzXw03.B.tYq7rLLNKlyrG80hQ7/8p6JkCCuKPZK"
+ },
+ "joe": {
+  "password": "$2b$10$gpK1C0WgSm3YSAtg6C0gLekI1dtqzm8YVBgE6TkjZ4rbuWEV2KI4S"
+ },
+ "so": {
+  "password": "$2b$10$DLN45YtFCkrtROwQ.AoPQ.3vekRG8QspFtAQ2qtO7I2cusq8sSM1W"
+ }
+}

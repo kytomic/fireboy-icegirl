@@ -1,60 +1,189 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>FireBoy and IceGirl Remastered</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="./style/style.css">
-    <link rel="shortcut icon" href="#">
-</head>
-<body>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" type="text/css" href="./style/style.css" />
+    <link rel="shortcut icon" href="#" />
+  </head>
+  <body>
+    <div id="background-authentication">
+      <div id="authentication-form" class="form-box">
+        <div class="button-box">
+          <div id="btn"></div>
+          <button type="button" class="toggle-btn" onclick="Menu.toggleLogin()">
+            Login
+          </button>
+          <button
+            type="button"
+            class="toggle-btn"
+            onclick="Menu.toggleRegistration()"
+          >
+            Register
+          </button>
+        </div>
+
+        <form id="login-form" class="input-group">
+          <input
+            id="login-username"
+            type="text"
+            class="input-field"
+            placeholder="User Name"
+            required
+          />
+          <input
+            id="login-password"
+            type="password"
+            class="input-field"
+            placeholder="Password"
+            required
+          />
+          <button type="submit" class="submit-btn">Login</button>
+          <div id="login-message" class="warning"></div>
+        </form>
+
+        <form id="register-form" class="input-group">
+          <input
+            id="register-username"
+            type="text"
+            class="input-field"
+            placeholder="User Name"
+            required
+          />
+          <input
+            id="register-password"
+            type="password"
+            class="input-field"
+            placeholder="Password"
+            required
+          />
+          <input
+            id="register-confirm"
+            type="password"
+            class="input-field"
+            placeholder="Enter Password Again"
+            required
+          />
+          <button type="submit" class="submit-btn">Register</button>
+          <div id="register-message" class="warning"></div>
+        </form>
+      </div>
+    </div>
+
+    <div id="background-main">
+      <div class="main">
+        <h1 class="menu-title">Fireboy and Icegirl: Remastered</h1>
+        <!-- <a href="#" class="menu-button" onclick="Menu.toggleCreate()"
+          >New Game</a
+        > -->
+        <a href="#" class="menu-button" onclick="Menu.toggleJoin()"
+          >Find Game</a
+        >
+        <a href="#" class="menu-button" onclick="Menu.toggleAbout()">About & Instruction</a>
+
+        <a href="#" class="menu-button" onclick="Menu.logOut()">Log Out</a>
+      </div>
+    </div>
+
+    <div class="popup" id="popup-about">
+      <div class="overlay"></div>
+      <div class="content">
+        <div class="close-btn" onclick="Menu.toggleAbout()">&times;</div>
+        <h1>About</h1>
+        <p style="text-align: left;">
+          Two players collaborate to escape the temple by solving puzzles, 
+          inspired by a childhood browser game “Fireboy and Watergirl 1: Forest Temple”.<br/><br/>
+          Player Control: key up, left, down for jumping, moving left and right.<br/><br/>
+          Win Condition: Both players successfully open the exit door and leave the temple.<br/><br/>
+          Lose Condition: One of the players are burned.<br/><br/>
+          Scores are computed by collected coins and finishing time.<br/><br/>
+        </p>
+      </div>
+    </div>
+
+    <div class="popup" id="popup-join">
+      <div class="overlay"></div>
+      <div class="content">
+        <div class="close-btn" onclick="Menu.toggleJoin()">&times;</div>
+        <h1>Find Game</h1>
+        <form id="join-form">
+          <input
+            id="join-room-num"
+            type="text"
+            class="input-field"
+            placeholder="Pass Code"
+            required
+          />
+
+          <input
+            type="checkbox"
+            id="character1"
+            name="character1"
+          />
+
+          <label> Fireboy</label><br />
+
+          <input
+            type="checkbox"
+            id="character2"
+            name="character2"
+          />
+          <label> Icegirl</label><br />
+
+          <input
+            type="checkbox"
+            id="cheatmode-option"
+            name="cheatmode-option"
+
+          />
+          <label> Cheat Mode</label><br /><br />
+          <button type="submit" class="submit-btn">Join</button>
+          <label id="join-form-error-input"></label><br /><br />
+        </form>
+      </div>
+    </div>
+
     <div id="game-container">
-        <canvas width="854px" height="480px"></canvas>
+      <canvas width="854px" height="480px"></canvas>
 
-        <svg xmlns="http://www.w3.org/2000/svg" id="counter">
-            <text x="40%" y="35">
-                TIME:<tspan id="timer">20</tspan>
-            </text>
-        </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" id="counter">
+        <text x="40%" y="35">
+          TIME: 
+          <tspan id="timer">20</tspan>
+        </text>
+      </svg>
 
-        <svg xmlns="http://www.w3.org/2000/svg" id="game-start">
-            <text x="50%" y="60%">Click here to start the game</text>
-        </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" id="game-start">
+        <text x="50%" y="60%">Click here to start the game</text>
+      </svg>
 
-        <svg xmlns="http://www.w3.org/2000/svg" id="game-waiting">
-            <text x="50%" y="60%">Waiting Another Player...</text>
-        </svg>
-        
-        <svg xmlns="http://www.w3.org/2000/svg" id="game-end">
-            <text x="50%" y="15%">You Win the Game!</text>
+      <svg xmlns="http://www.w3.org/2000/svg" id="game-waiting">
+        <text id="waiting-text" x="50%" y="60%">Waiting Another Player...</text>
+      </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" id="game-end">
+        <text x="50%" y="15%">You Win the Game!</text>
 
-            <text x="50%" y="35%" class="scores" id="score1">Score 1: </text>
-            <text x="50%" y="42%" class="scores" id="score2">Score 2: </text>
-            <text x="50%" y="49%" class="scores" id="score3">Score 3: </text>
-            <text x="50%" y="56%" id="your-score">Score 3: </text>
+        <text x="15%" y="30%" class="scores" id="score1">Rank 1:  No Existed Yet</text>
+        <text x="15%" y="37%" class="scores" id="score2">Rank 2:  No Existed Yet</text>
+        <text x="15%" y="44%" class="scores" id="score3">Rank 3:  No Existed Yet</text>
+        <text x="15%" y="55%" id="your-score">Your Score:  </text>
 
-            <g class="restart-button">
-                <rect x="40%" y="65%" rx="5" ry="5" width="20%" height="10%"/>
-                <text x="50%" y="72%">Restart</text>
-            </g>
-
-            <g class="menu-button">
-                <rect x="35%" y="80%" rx="5" ry="5" width="30%" height="10%"/>
-                <text x="50%" y="87%">To Main Menu</text>
-            </g>
-        </svg>
-        
-        <svg xmlns="http://www.w3.org/2000/svg" id="game-over">        
-            <text x="50%" y="30%">You Lose the Game!</text>
-            <g class="restart-button">
-                <rect x="40%" y="55%" rx="5" ry="5" width="20%" height="10%"/>
-                <text x="50%" y="62%">Restart</text>
-            </g>
-
-            <g class="menu-button">
-                <rect x="35%" y="70%" rx="5" ry="5" width="30%" height="10%"/>
-                <text x="50%" y="77%">To Main Menu</text>
-            </g>
-        </svg>
+        <g class="restart-button">
+            <rect x="40%" y="65%" rx="5" ry="5" width="20%" height="10%"/>
+            <text x="50%" y="72%">Restart</text>
+        </g>
+      </svg>
+    
+      <svg xmlns="http://www.w3.org/2000/svg" id="game-over">        
+          <text x="50%" y="30%">You Lose the Game!</text>
+          <g class="restart-button">
+              <rect x="40%" y="55%" rx="5" ry="5" width="20%" height="10%"/>
+              <text x="50%" y="62%">Restart</text>
+          </g>
+      </svg>
     </div>
 
     <script src="/socket.io/socket.io.min.js"></script>
@@ -69,37 +198,179 @@
     <script src="scripts/socket.js"></script>
     <script src="scripts/fire.js"></script>
     <script src="scripts/score.js"></script>
+    <script src="scripts/menu.js"></script>
+    <script src="scripts/registration.js"></script>
+    <script src="scripts/authentication.js"></script>
 
-    <script>    
-    $(document).ready(function() {
+    <script>
+      $(document).ready(function () {
+        $("#game-container").hide();
+        $("#background-authentication").hide();
+
+        let playerNum = null, player = null;
+        let cheat_mode = false;
+
+        let socket = null;
+        let playerName = null, anotherPlayerName = null;
+
+        Authentication.validate(
+          () => {
+            $("#background-authentication").hide();
+            // UserPanel.update(Authentication.getUser());
+            // UserPanel.show();
+
+            Socket.connect();
+            socket = Socket.getSocket();
+            socket.on('receive playerName', (name) => {anotherPlayerName = name; console.log('anotherPlayerName ', anotherPlayerName)});
+            // console.log("login success: " + socket.request.session.user);
+          },
+          () => {
+            $("#background-authentication").show();
+          }
+        );
+
+        // Submit event for the signin form
+        $("#login-form").on("submit", (e) => {
+          // Do not submit the form
+          e.preventDefault();
+
+          // Get the input fields
+          const username = $("#login-username").val().trim();
+          const password = $("#login-password").val().trim();
+          playerName = username;
+          localStorage.setItem('username', playerName);
+
+          // Send a signin request
+          Authentication.signin(
+            username,
+            password,
+            () => {
+              $("#background-authentication").hide();
+              //   hide();
+              //   UserPanel.update(Authentication.getUser());
+              //   UserPanel.show();
+
+              Socket.connect();
+              socket = Socket.getSocket();
+              socket.on('receive playerName', (name) => {anotherPlayerName = name; console.log('anotherPlayerName ', anotherPlayerName)});
+              // console.log("login success: " + username);
+            },
+            (error) => {
+              $("#login-message").text(error);
+            }
+          );
+        });
+
+        // Submit event for the register form
+        $("#register-form").on("submit", (e) => {
+          // Do not submit the form
+          e.preventDefault();
+
+          // Get the input fields
+          const username = $("#register-username").val().trim();
+          const password = $("#register-password").val().trim();
+          const confirmPassword = $("#register-confirm").val().trim();
+
+          playerName = username;
+
+          // Password and confirmation does not match
+          if (password != confirmPassword) {
+            $("#register-message").text("Passwords do not match.");
+            return;
+          }
+
+          // Send a register request
+          Registration.register(
+            username,
+            password,
+            () => {
+              $("#register-form").get(0).reset();
+              $("#register-message").text("You can sign in now.");
+            },
+            (error) => {
+              $("#register-message").text(error);
+            }
+          );
+        });
+
+        // Submit event for the register form
+        let is_form_submit_before = false; 
+        $("#join-form").on("submit", (e) => {
+          // Do not submit the form
+          e.preventDefault();
+
+          let roomNum = $("#join-room-num").val().trim();
+          if (playerName == null && localStorage.getItem('username') != null) {
+            playerName = localStorage.getItem('username');
+            console.log('playername ', playerName);
+          }
+
+          // Get the input fields
+          if ($("#character1").is(':checked')) {
+            playerNum = '1'; 
+          }
+
+          if ($("#character2").is(':checked')) {
+            playerNum = '2'; 
+          }
+
+          if ($("#cheatmode-option").is(':checked')) {
+            cheat_mode = true;
+          }else{
+            cheat_mode = false;
+          }
+
+          if ($("#character1").is(':checked') && $("#character2").is(':checked')) {
+            $('#join-form-error-input').text('You cannot pick two characters simultaneously.');
+            return;
+          }
+
+          // console.log('roomNum ', roomNum);
+          if ($("#character1").is(':checked') == true || $("#character2").is(':checked') == true) {
+            socket.emit('send roomNum', roomNum);
+            if (is_form_submit_before == false) {
+              socket.on('pair up', (is_approved) => {
+                is_form_submit_before = true;
+                if (is_approved == 'approved') {
+                  socket.emit('send playerName', playerName);
+                  $("#popup-join").hide();
+                  $("#background-main").hide();
+                  $("#game-container").show();
+                } else {
+                  $('#join-form-error-input').text('Room does not exist...');
+                }
+              })
+            }
+          }else{
+            $('#join-form-error-input').text('You have to pick at least one character.');
+          }
+        });
+
         /* Get the canvas and 2D context */
         const cv = $("canvas").get(0);
         const context = cv.getContext("2d");
 
         /* Create the sounds */
         const sounds = {
-            walk: new Audio("./media/walk.mp3"),
-            collect: new Audio("./media/collect.mp3"),
-            trigger: new Audio("./media/trigger.mp3")
+          walk: new Audio("./media/walk.mp3"),
+          collect: new Audio("./media/collect.mp3"),
+          trigger: new Audio("./media/trigger.mp3"),
+          background: new Audio("./media/background.mp3")
         };
 
-        Socket.connect();
-        let socket = Socket.getSocket();
 
-        let gameStartTime = 0;      // The timestamp when the game starts
+        let gameStartTime = 0; // The timestamp when the game starts
 
-        $('#game-over').hide();
-        $('#game-end').hide();
-        $('#game-waiting').hide();
-        $('#counter').hide();
+        $("#game-over").hide();
+        $("#game-end").hide();
+        $("#game-waiting").hide();
+        $("#counter").hide();
 
-        let playerNum = null, player = null;
         let is_gameover = false, is_gameend = null;
-        let cheat_mode = null;
-        let movingBoxes1 = null, movingBoxes2 = null;       
+        let movingBoxes1 = null, movingBoxes2 = null;
 
         /* Create the sprites in the game */
-        let player1 = null, player2 = null; 
+        let player1 = null, player2 = null;
         let coins = null, fires = null;
         let redDoor = null, blueDoor = null;
         let redBar = null, blueBar = null;
@@ -109,338 +380,343 @@
 
         /* The main processing of the game */
         function doFrame(now) {
-            if (gameStartTime == 0) gameStartTime = now;
-            
-            /* Update the time remaining */
-            let gameTimeSoFar = Math.ceil((now - gameStartTime) / 1000);
-            $("#timer").text(gameTimeSoFar);
-                        
-            // Handling bar-switch logic
-            if (redSwitch.getTriggerState() == false) {
-                if (redSwitch.checkTrigger(player2) == true) {
-                    sounds.trigger.play();
-                    movingBoxes1 = redBar.move(movingBoxes1);
-                    player1.setMovingBoxes(movingBoxes1);
-                }
+          if (gameStartTime == 0) gameStartTime = now;
+
+          /* Update the time remaining */
+          let gameTimeSoFar = Math.ceil((now - gameStartTime) / 1000);
+          let minutes = (Math.floor(gameTimeSoFar / 60)).toString();
+          let seconds = gameTimeSoFar % 60;
+          seconds = (seconds < 10) ? '0' + seconds.toString(): seconds.toString();
+          $("#timer").text(minutes.toString() + ':' + seconds);
+
+          // Handling bar-switch logic
+          if (redSwitch.getTriggerState() == false) {
+            if (redSwitch.checkTrigger(player2) == true) {
+              sounds.trigger.play();
+              movingBoxes1 = redBar.move(movingBoxes1);
+              player1.setMovingBoxes(movingBoxes1);
             }
-            if (blueSwitch.getTriggerState() == false) {
-                if (blueSwitch.checkTrigger(player1) == true) {
-                    sounds.trigger.play();
-                    movingBoxes2 = blueBar.move(movingBoxes2);
-                    player2.setMovingBoxes(movingBoxes2);
-                }
+          }
+          if (blueSwitch.getTriggerState() == false) {
+            if (blueSwitch.checkTrigger(player1) == true) {
+              sounds.trigger.play();
+              movingBoxes2 = blueBar.move(movingBoxes2);
+              player2.setMovingBoxes(movingBoxes2);
             }
-            
-            // Handling coin collection
-            coins.forEach(coin => {
-                if (coin.getBoundingBox().intersect(player1.getBoundingBox())) {
-                    sounds.collect.play();
-                    player1.coinIncrement();
-                    coin.hide();
-                }else if (coin.getBoundingBox().intersect(player2.getBoundingBox())) {
-                    sounds.collect.play();
-                    player2.coinIncrement();
-                    coin.hide();
+          }
+
+          // Handling coin collection
+          coins.forEach((coin) => {
+            if (coin.getBoundingBox().intersect(player1.getBoundingBox())) {
+              sounds.collect.play();
+              player1.coinIncrement();
+              coin.hide();
+            } else if (
+              coin.getBoundingBox().intersect(player2.getBoundingBox())
+            ) {
+              sounds.collect.play();
+              player2.coinIncrement();
+              coin.hide();
+            }
+          });
+
+          // Handling game-over logic
+          if (!cheat_mode) {
+            fires.forEach((fire) => {
+              if ((fire.getBoundingBox().intersect(player1.getBoundingBox()) || fire.getBoundingBox().intersect(player2.getBoundingBox())) && !is_gameover) {
+                $(document).off("keydown");
+                $("#game-over").show();
+                is_gameover = true;
+                return;
+              }
+            });
+
+            if (is_gameover) {
+              return;
+            }
+
+            if (player != null && player.getJumping() == true) {
+              player.jump(socket, playerNum);
+            } else if (player != null) {
+              player.fall(socket, playerNum);
+            }
+          }
+
+          // Handling winning logic
+          let redDoorArrived = redDoor.getBoundingBox().intersect(player1.getBoundingBox());
+          let blueDoorArrived = blueDoor.getBoundingBox().intersect(player2.getBoundingBox());
+          if (redDoorArrived) {
+            redDoor.arrivedEffect();
+          } else {
+            redDoor.closedEffect();
+          }
+
+          if (blueDoorArrived) {
+            blueDoor.arrivedEffect();
+          } else {
+            blueDoor.closedEffect();
+          }
+          if (redDoorArrived && blueDoorArrived && !is_gameend) {
+            is_gameend = true;
+            let score = Score(player1.getCollectedCoin(), player2.getCollectedCoin(), gameTimeSoFar);
+
+            if (playerNum == '1') {
+              playerName1 = playerName;
+              playerName2 = anotherPlayerName;
+            }else if (playerNum == '2') {
+              playerName1 = anotherPlayerName;
+              playerName2 = playerName;
+            }
+
+            socket.emit('save score', {player1: playerName1, player2: playerName2, score: score});
+            socket.on('send scores', (scores) => {
+                let is_score_in_rank = false;
+                let yourRank = -1;
+                $('#your-score').hide(); 
+                for (let i = 0; i < scores.length; i++) {
+                    let rank = i + 1;
+                    if (i < 3 && scores[i].player1 == playerName1 && scores[i].player2 == playerName2 && scores[i].score == score) {
+                        $('#score' + rank.toString()).text('Rank ' + rank + ':  ' + 'Player 1: ' + playerName1 + ', Player 2: ' + playerName2 + ', Your Score: ' + score);
+                        is_score_in_rank = true;
+                    }else if (i < 3){
+                        $('#score' + rank.toString()).text('Rank ' + rank + ':  ' + 'Player 1: ' + scores[i].player1 + ', Player 2: ' + scores[i].player2 + ', Score: ' + scores[i].score);
+                    }else if (scores[i].player1 == playerName1 && scores[i].player2 == playerName2 && scores[i].score == score) {
+                        yourRank = rank;
+                    }
                 }
+                
+                if (!is_score_in_rank) {
+                    $('#your-score').show(); 
+                    $('#your-score').text('Rank ' + yourRank + ':  ' + 'Player 1: ' + playerName1 + ', Player 2: ' + playerName2 + ', Your Score: ' + score);
+                }
+
+                $('#game-end').show();
             })
+            return;
+          }
 
-            // Handling game-over logic
-            if (!cheat_mode) {
-                fires.forEach(fire => {
-                    if ((fire.getBoundingBox().intersect(player1.getBoundingBox()) || fire.getBoundingBox().intersect(player2.getBoundingBox())) && !is_gameover) {
-                        $(document).off('keydown');
-                        $('#game-over').show();
-                        is_gameover = true;
-                        return;
-                    }
-                })
+          /* Update the sprites */
+          player1.update(now);
+          player2.update(now);
+          redBar.update(now);
+          redDoor.update(now);
+          blueBar.update(now);
+          blueDoor.update(now);
+          coins.forEach((coin) => coin.update(now));
+          fires.forEach((fire) => fire.update(now));
 
-                if (is_gameover) {
-                    return;
-                }
+          // /* Clear the screen */
+          context.clearRect(0, 0, cv.width, cv.height);
 
-                if (player != null && player.getJumping() == true) {
-                    player.jump(socket, playerNum);
-                }else if (player != null){
-                    player.fall(socket, playerNum);
-                }
-            }
-            
-            // Handling winning logic
-            let redDoorArrived = redDoor.getBoundingBox().intersect(player1.getBoundingBox());
-            let blueDoorArrived = blueDoor.getBoundingBox().intersect(player2.getBoundingBox());
-            if (redDoorArrived) {
-                redDoor.arrivedEffect()
-            }else{
-                redDoor.closedEffect();
-            }    
-            if (blueDoorArrived) {
-                blueDoor.arrivedEffect()
-            }else{
-                blueDoor.closedEffect();
-            } 
-            if (redDoorArrived && blueDoorArrived && !is_gameend) {
-                is_gameend = true;
-                let score = Score(player1.getCollectedCoin(), player2.getCollectedCoin(), gameTimeSoFar);
+          // /* Draw the sprites */
+          redDoor.draw();
+          blueDoor.draw();
+          redBar.draw();
+          blueBar.draw();
+          redSwitch.draw();
+          blueSwitch.draw();
+          coins.forEach((coin) => coin.draw());
+          fires.forEach((fire) => fire.draw());
 
-                let playerName1 = 'player1', playerName2 = 'player2';
+          player1.draw();
+          player2.draw();
 
-                socket.emit('save score', {player1: playerName1, playerName1: playerName2, score: score});
-                socket.on('send scores', (scores) => {
-                    let is_score_in_rank = false;
-                    let yourRank = -1;
-                    $('#your-score').hide(); 
-                    for (let i = 0; i < scores.length; i++) {
-                        let rank = i + 1;
-                        if (i < 3 && scores[i].player1 == 'player1' && scores[i].player2 == 'player2' && scores[i].score == score) {
-                            $('#score' + rank.toString()).text('Rank ' + rank + ': ' + 'Player 1: ' + playerName1 + ', Player 2: ' + playerName2 + ', Your Score: ' + score);
-                            is_score_in_rank = true;
-                        }else if (i < 3){
-                            $('#score' + rank.toString()).text('Rank ' + rank + ': ' + 'Player 1: ' + scores[i].player1 + ', Player 2: ' + scores[i].player2 + ', Score: ' + scores[i].score);
-                        }else if (scores[i].player1 == 'player1' && scores[i].player2 == 'player2' && scores[i].score == score) {
-                            yourRank = rank;
-                        }
-                    }
-                    
-                    if (!is_score_in_rank) {
-                        $('#your-score').show(); 
-                        $('#your-score').text('Rank ' + yourRank + ': ' + 'Player 1: ' + playerName1 + ', Player 2: ' + playerName2 + ', Your Score: ' + score);
-                    }
-
-                    $('#game-end').show();
-                    return;
-                })
-            }
-            
-            /* Update the sprites */
-            player1.update(now);
-            player2.update(now);
-            redBar.update(now);
-            redDoor.update(now);
-            blueBar.update(now);
-            blueDoor.update(now);
-            coins.forEach(coin => coin.update(now));
-            fires.forEach(fire => fire.update(now));
-            
-            // /* Clear the screen */
-            context.clearRect(0, 0, cv.width, cv.height);
-            
-            // /* Draw the sprites */
-            redDoor.draw();
-            blueDoor.draw();
-            redBar.draw();
-            blueBar.draw();
-            redSwitch.draw();
-            blueSwitch.draw();
-            coins.forEach(coin => coin.draw())
-            fires.forEach(fire => fire.draw())
-            
-            player1.draw();
-            player2.draw();
-            
+          if (is_gameover || is_gameend) {
+            return;
+          }else{
             // /* Process the next frame */
             requestAnimationFrame(doFrame);
+          }
         }
-        
-        
+
         /* Handle the start of the game */
-        $("#game-start").on("click", function() {
-            // playerNum = null;
-            player = null;
-            is_gameover = false;
-            is_gameend = false;
+        $("#game-start").on("click", function () {
+          // playerNum = null;
+          player = null;
+          is_gameover = false;
+          is_gameend = false;
 
-            // Cheat Mode Configuration
-            cheat_mode = false;
-            
-            /* Create the game area */
-            // top, left, bottom, right
-            movingBoxes1 = [
-                BoundingBox(context, 400, 25, 440, 280),
-                BoundingBox(context, 315, 280, 440, 400),
-                BoundingBox(context, 315, 25, 360, 280),
-                BoundingBox(context, 315, 25, 360, 120),
-                BoundingBox(context, 228, 120, 280, 300),
-                BoundingBox(context, 135, 300, 280, 400),
-                BoundingBox(context, 135, 25, 190, 300),
-                BoundingBox(context, 20, 25, 190, 120),
-                BoundingBox(context, 20, 120, 95, 400),
-            ];
-            movingBoxes2 = [
-                BoundingBox(context, 400, 450, 440, 820),
-                BoundingBox(context, 315, 450, 440, 580),
-                BoundingBox(context, 315, 580, 360, 820),
-                BoundingBox(context, 228, 720, 360, 820),
-                BoundingBox(context, 228, 450, 280, 720),
-                BoundingBox(context, 228, 450, 280, 560),
-                BoundingBox(context, 135, 560, 190, 820),
-                BoundingBox(context, 20, 720, 190, 820),
-                BoundingBox(context, 20, 450, 95, 720),
-            ];
+          sounds.background.play();
 
-            if (cheat_mode) {
-                movingBoxes1 = [BoundingBox(context, 20, 25, 440, 400)];
-                movingBoxes2 = [BoundingBox(context, 20, 450, 440, 820)];
-            }
+          /* Create the game area */
+          // top, left, bottom, right
+          movingBoxes1 = [
+            BoundingBox(context, 400, 25, 440, 280),
+            BoundingBox(context, 315, 280, 440, 400),
+            BoundingBox(context, 315, 25, 360, 280),
+            BoundingBox(context, 315, 25, 360, 120),
+            BoundingBox(context, 228, 120, 280, 300),
+            BoundingBox(context, 135, 300, 280, 400),
+            BoundingBox(context, 135, 25, 190, 300),
+            BoundingBox(context, 20, 25, 190, 120),
+            BoundingBox(context, 20, 120, 95, 400),
+          ];
+          movingBoxes2 = [
+            BoundingBox(context, 400, 450, 440, 820),
+            BoundingBox(context, 315, 450, 440, 580),
+            BoundingBox(context, 315, 580, 360, 820),
+            BoundingBox(context, 228, 720, 360, 820),
+            BoundingBox(context, 228, 450, 280, 720),
+            BoundingBox(context, 228, 450, 280, 560),
+            BoundingBox(context, 135, 560, 190, 820),
+            BoundingBox(context, 20, 720, 190, 820),
+            BoundingBox(context, 20, 450, 95, 720),
+          ];
 
-            /* Create the sprites in the game */
-            player1 = Player(context, 100, 440, movingBoxes1, 1, cheat_mode); // The player 1
-            player2 = Player(context, 700, 440, movingBoxes2, 2, cheat_mode); // The player 2
-            coins = [
-                Coin(context, 150, 430), 
-                Coin(context, 550, 430),
-                Coin(context, 300, 340),
-                Coin(context, 650, 340),
-                Coin(context, 200, 260),
-                Coin(context, 750, 260),
-                Coin(context, 250, 160),
-                Coin(context, 700, 160),
-                Coin(context, 80, 60),
-                Coin(context, 650, 60)];        // The coins
-            redDoor = Door(context, 340, 68, 'red');
-            blueDoor = Door(context, 510, 68, 'blue');
-            redBar = Bar(context, 78, 362, 'red');
-            blueBar = Bar(context, 500, 272, 'blue');
-            redSwitch = Switch(context, 770, 373, 'red');
-            blueSwitch = Switch(context, 370, 290, 'blue');
-            fires = [
-                Fire(context, 347, 442),
-                Fire(context, 365, 442),
-                Fire(context, 382, 442),
-                Fire(context, 398, 442),
-                Fire(context, 28, 190),
-                Fire(context, 48, 190),
-                Fire(context, 820, 360),
-                Fire(context, 800, 190),
-                Fire(context, 820, 190),
-            ]
+          if (cheat_mode) {
+            movingBoxes1 = [BoundingBox(context, 20, 25, 440, 400)];
+            movingBoxes2 = [BoundingBox(context, 20, 450, 440, 820)];
+          }
 
-            /* Hide the start screen */
-            $("#game-start").hide();
-            $("#game-waiting").show();
-            
-            if (playerNum == '1') {
-                console.log('Being player 1');
-                player = player1;
-            }else if (playerNum == '2'){
-                console.log('Being player 2');
-                player = player2;
-            }
-            
-            let is_ready = false;
-            socket.emit("assign player");
-            if (!assigned_player) {
-                socket.on("receive player", num => {
-                    if (!assigned_player) {
-                        playerNum = num;
-                        if (playerNum == '1') {
-                            console.log('Being player 1');
-                            player = player1;
-                        }else if (playerNum == '2'){
-                            console.log('Being player 2');
-                            player = player2;
-                        }
-                    }
-                    
-                    socket.on('player ready', () => {
-                        console.log('player ready');
-                        is_ready = true;
-                        $("#game-waiting").hide();
-                        $("#counter").hide();
-                        gameStartTime = 0;
-                    });
+          /* Create the sprites in the game */
+          player1 = Player(context, 100, 440, movingBoxes1, 1, cheat_mode); // The player 1
+          player2 = Player(context, 700, 440, movingBoxes2, 2, cheat_mode); // The player 2
+          coins = [
+            Coin(context, 150, 430),
+            Coin(context, 550, 430),
+            Coin(context, 300, 340),
+            Coin(context, 650, 340),
+            Coin(context, 200, 260),
+            Coin(context, 750, 260),
+            Coin(context, 250, 160),
+            Coin(context, 700, 160),
+            Coin(context, 80, 60),
+            Coin(context, 650, 60),
+          ]; // The coins
+          redDoor = Door(context, 340, 68, "red");
+          blueDoor = Door(context, 510, 68, "blue");
+          redBar = Bar(context, 78, 362, "red");
+          blueBar = Bar(context, 500, 272, "blue");
+          redSwitch = Switch(context, 770, 373, "red");
+          blueSwitch = Switch(context, 370, 290, "blue");
+          fires = [
+            Fire(context, 347, 442),
+            Fire(context, 365, 442),
+            Fire(context, 382, 442),
+            Fire(context, 398, 442),
+            Fire(context, 28, 190),
+            Fire(context, 48, 190),
+            Fire(context, 820, 360),
+            Fire(context, 800, 190),
+            Fire(context, 820, 190),
+          ];
 
-                    let moveNum = 0;
-                    assigned_player = true;
-                    $(document).on("keydown", function(event) {
-                        /* Handle the key down */
-                        if (event.keyCode == 37 && is_ready) {
-                            player.move(1);
-                            moveNum = 1
-                        }else if (event.keyCode == 38 && is_ready && cheat_mode) {
-                            player.move(2);
-                            moveNum = 2;
-                        }else if (event.keyCode == 38 && is_ready && player.getJumping() != true) {
-                            player.setJumping(true);
-                            moveNum = 2;
-                            return;
-                        }else if (event.keyCode == 39 && is_ready){
-                            player.move(3);
-                            moveNum = 3;
-                        }else if (event.keyCode == 40 && is_ready){
-                            player.move(4);
-                            moveNum = 4;
-                        }
-                        // Send character movement to server for synchronised animation
-                        sounds.walk.play();
-                        socket.emit('player move', moveNum.toString());
-                    });
-                    
-                    /* Handle the keyup of arrow keys and spacebar */
-                    let stopNum = 0;
-                    $(document).on("keyup", function(event) {
-                        /* Handle the key up */
-                        if (event.keyCode == 37) {
-                            player.stop(1);
-                            stopNum = 1;
-                        }else if (event.keyCode == 38 && cheat_mode){
-                            player.stop(2);
-                            stopNum = 2;
-                        }else if (event.keyCode == 39){
-                            player.stop(3);
-                            stopNum = 3;
-                        }else if (event.keyCode == 40){
-                            player.stop(4);
-                            stopNum = 4;
-                        }
-                        
-                        // Send character movement to server for synchronised animation
-                        socket.emit('player stop', stopNum.toString());
-                    });
-
-                    socket.on('move player', (num) => {
-                        num = Number(num);
-                        if (num != 2 || cheat_mode) {
-                            if (playerNum == '1') player2.move(num);
-                            if (playerNum == '2') player1.move(num);
-                            sounds.walk.play();
-                        }
-                    });
-                    socket.on('stop player', (num) => {
-                        num = Number(num);
-                        if (playerNum == '1') player2.stop(num);
-                        if (playerNum == '2') player1.stop(num);
-                    });
-                    socket.on('jump player', (cor) => {
-                        if (playerNum == '1') player2.setXY(cor.x, cor.y);
-                        if (playerNum == '2') player1.setXY(cor.x, cor.y);
-                    })
-                    socket.on('fall player', (cor) => {
-                        if (playerNum == '1') player2.setXY(cor.x, cor.y);
-                        if (playerNum == '2') player1.setXY(cor.x, cor.y);
-                    })
-
-                    /* Start the game */
-                    requestAnimationFrame(doFrame);
+          /* Hide the start screen */
+          $("#game-start").hide();
+          
+          if (playerNum == "1") {
+            console.log("Being player 1");
+            $("#waiting-text").text('Waiting for Icegirl...');
+            player = player1;
+          } else if (playerNum == "2") {
+            console.log("Being player 2");
+            player = player2;
+            $("#waiting-text").text('Waiting for Fireboy...');
+          }
+          $("#game-waiting").show();
+          
+          let is_ready = false;
+          socket.emit("assign player", playerNum);
+          if (!assigned_player) {
+            socket.on("receive player", (num) => {
+              if (!assigned_player) {
+                socket.on('player ready', () => {
+                  console.log('player ready');
+                  is_ready = true;
+                  $("#game-waiting").hide();
+                  $("#counter").show();
+                  gameStartTime = 0;
                 });
-            }
-            
+              }
+
+              let moveNum = 0;
+              assigned_player = true;
+              $(document).on("keydown", function (event) {
+                /* Handle the key down */
+                if (event.keyCode == 37 && is_ready) {
+                  player.move(1);
+                  moveNum = 1;
+                } else if (event.keyCode == 38 && is_ready && cheat_mode) {
+                  player.move(2);
+                  moveNum = 2;
+                } else if (
+                  event.keyCode == 38 &&
+                  is_ready &&
+                  player.getJumping() != true
+                ) {
+                  player.setJumping(true);
+                  moveNum = 2;
+                  return;
+                } else if (event.keyCode == 39 && is_ready) {
+                  player.move(3);
+                  moveNum = 3;
+                } else if (event.keyCode == 40 && is_ready) {
+                  player.move(4);
+                  moveNum = 4;
+                }
+                // Send character movement to server for synchronised animation
+                sounds.walk.play();
+                socket.emit("player move", moveNum.toString());
+              });
+
+              /* Handle the keyup of arrow keys and spacebar */
+              let stopNum = 0;
+              $(document).on("keyup", function (event) {
+                /* Handle the key up */
+                if (event.keyCode == 37) {
+                  player.stop(1);
+                  stopNum = 1;
+                } else if (event.keyCode == 38 && cheat_mode) {
+                  player.stop(2);
+                  stopNum = 2;
+                } else if (event.keyCode == 39) {
+                  player.stop(3);
+                  stopNum = 3;
+                } else if (event.keyCode == 40) {
+                  player.stop(4);
+                  stopNum = 4;
+                }
+
+                // Send character movement to server for synchronised animation
+                socket.emit("player stop", stopNum.toString());
+              });
+
+              socket.on("move player", (num) => {
+                num = Number(num);
+                if (num != 2 || cheat_mode) {
+                  if (playerNum == "1") player2.move(num);
+                  if (playerNum == "2") player1.move(num);
+                  sounds.walk.play();
+                }
+              });
+              socket.on("stop player", (num) => {
+                num = Number(num);
+                if (playerNum == "1") player2.stop(num);
+                if (playerNum == "2") player1.stop(num);
+              });
+              socket.on("jump player", (cor) => {
+                if (playerNum == "1") player2.setXY(cor.x, cor.y);
+                if (playerNum == "2") player1.setXY(cor.x, cor.y);
+              });
+              socket.on("fall player", (cor) => {
+                if (playerNum == "1") player2.setXY(cor.x, cor.y);
+                if (playerNum == "2") player1.setXY(cor.x, cor.y);
+              });
+
+              /* Start the game */
+              requestAnimationFrame(doFrame);
+            });
+          }
         });
-        
+
         $(".restart-button").on("click", function(event) {
-            $("#game-over").hide();
-            $("#game-end").hide();
-            $("#game-start").show();
+          sounds.background.pause();
+          $("#game-over").hide();
+          $("#game-end").hide();
+          $("#game-start").show();
         });
 
-        $(".menu-button").on("click", function(event) {
-            $("#game-over").hide();
-            $("#game-end").hide();
-            $("#game-start").show();
-        });
-
-    });
-
+      });
     </script>
-</body>
+  </body>
 </html>
